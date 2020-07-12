@@ -1,7 +1,7 @@
 (ns nameless.chat.sessions
   (:require [immutant.web.async :as async]
             [clojure.tools.logging :as log]
-            [nameless.chat.cache :as cache])
+            [nameless.cache :as cache])
   (:import (org.joda.time Instant)))
 
 (def channel-store (atom []))

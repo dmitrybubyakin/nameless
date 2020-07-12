@@ -1,4 +1,4 @@
-(ns nameless.chat.cache
+(ns nameless.cache
   (:require [taoensso.carmine :as car :refer (wcar)]
             [mount.core :refer [defstate]]
             [config.core :refer [env]]))

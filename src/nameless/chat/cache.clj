@@ -1,8 +1,10 @@
 (ns nameless.chat.cache
-  (:require [taoensso.carmine :as car :refer (wcar)]))
+  (:require [taoensso.carmine :as car :refer (wcar)]
+            [mount.core :refer [defstate]]
+            [config.core :refer [env]]))
 
 (def session-key "session-")
-(def conn {:pool {} :spec {:host "127.0.0.1" :port 6379}})
+(def conn {:pool {} :spec {:host (:host (:cache env)) :port (:port (:cache env))}})
 
 (defmacro wcar* [& body] `(car/wcar conn ~@body))
 

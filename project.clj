@@ -8,7 +8,8 @@
                  [compojure "1.6.1"]
                  [ring/ring-core "1.7.1"]
                  [environ "1.0.0"]
-                 [org.clojure/tools.logging "1.1.0"]]
+                 [org.clojure/tools.logging "1.1.0"]
+                 [com.taoensso/carmine "2.19.1"]]
   :main ^:skip-aot nameless.core
   :uberjar-name "nameless-standalone.jar"
   :target-path "target/%s"

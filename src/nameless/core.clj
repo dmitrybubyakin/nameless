@@ -6,6 +6,7 @@
     [compojure.core :refer (ANY GET defroutes)]
     [ring.util.response :refer (response redirect content-type)]
     [nameless.chat.sessions :as sessions]
+    [nameless.chat.domain.core :as core]
     [ring.middleware.params :refer [wrap-params]]
     [nameless.migrations :as mg]
     [clojure.tools.logging :as log]
@@ -15,7 +16,7 @@
 
 (defroutes routes
            (GET "/" [] "Hello ####")
-           (GET "/sessions" [] (str "Active Sessions - " (sessions/active-sessions)))
+           (GET "/sessions" [] (str "Active Sessions - " (core/active-sessions)))
            (route/resources "/"))
 
 (defn run-job [command]

@@ -18,3 +18,6 @@
 
 (defn active-sessions []
   (wcar* (car/keys (str session-key "*"))))
+
+(defn delete-session [uid]
+  (wcar* (car/del (str session-key uid))))

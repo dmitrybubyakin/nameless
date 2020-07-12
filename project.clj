@@ -15,7 +15,9 @@
                  [hikari-cp "2.9.0"]
                  [org.clojure/java.jdbc "0.7.11"]
                  [org.postgresql/postgresql "42.2.8"]
-                 [honeysql "0.9.10"]]
+                 [honeysql "0.9.10"]
+                 [cheshire "5.10.0"]
+                 [clj-time "0.15.2"]]
   :main ^:skip-aot nameless.core
   :uberjar-name "nameless-standalone.jar"
   :target-path "target/%s"

@@ -16,8 +16,7 @@
                                     (s/format))
                                 {:transaction? false})]
       (if (= 1 (first status))
-        {:status :success
-         :data    data}
+        content
         :failure))
     (catch Exception e
       (log/error "Failed to save chat : " (.getMessage e))

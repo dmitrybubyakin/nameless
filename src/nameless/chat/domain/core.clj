@@ -5,7 +5,9 @@
             [clojure.walk :as wk]
             [cheshire.core :refer :all]
             [clj-time.core :as t]
-            [clj-time.coerce :as c]))
+            [clj-time.coerce :as c]
+            [config.core :refer [env]]
+            [clojure.tools.logging :as log]))
 
 (def channel-store (atom []))
 
@@ -27,11 +29,18 @@
   (save-session channel)
   (async/send! channel "Ready to send nameless feedbacks !"))
 
+(defn retry-save-message [url message author]
+  ;This has to be fixed
+  (repeatedly (:save-retry-limit (:message env))
+              (db/add! url message author)))
+
 (defn save-message [channel m]
   (let [data (decode m)
-        {:keys [message author url]} (wk/keywordize-keys data)]
-    (db/add! url message author)
-    (async/send! channel message)))
+        {:keys [message author url]} (wk/keywordize-keys data)
+        content (db/add! url message author)]
+    (if (= content :failure)
+      (retry-save-message url message author)
+      (async/send! channel content))))
 
 (defn remove-session [channel]
   (let [uid (session->unique-id channel)]

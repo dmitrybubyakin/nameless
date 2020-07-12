@@ -7,7 +7,8 @@
                  [org.immutant/immutant "2.1.10"]
                  [compojure "1.6.1"]
                  [ring/ring-core "1.7.1"]
-                 [environ "1.0.0"]]
+                 [environ "1.0.0"]
+                 [org.clojure/tools.logging "1.1.0"]]
   :main ^:skip-aot nameless.core
   :uberjar-name "nameless-standalone.jar"
   :target-path "target/%s"

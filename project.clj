@@ -14,7 +14,8 @@
                  [ragtime "0.8.0"]
                  [hikari-cp "2.9.0"]
                  [org.clojure/java.jdbc "0.7.11"]
-                 [org.postgresql/postgresql "42.2.8"]]
+                 [org.postgresql/postgresql "42.2.8"]
+                 [honeysql "0.9.10"]]
   :main ^:skip-aot nameless.core
   :uberjar-name "nameless-standalone.jar"
   :target-path "target/%s"

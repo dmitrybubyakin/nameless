@@ -1,7 +1,8 @@
 (ns nameless.chat.sessions
   (:require [immutant.web.async :as async]
             [clojure.tools.logging :as log]
-            [nameless.cache :as cache])
+            [nameless.cache :as cache]
+            [nameless.chat.domain.core :as core])
   (:import (org.joda.time Instant)))
 
 (def channel-store (atom []))
@@ -9,13 +10,8 @@
 (defn active-sessions []
   (count (cache/active-sessions)))
 
-(defn session->unique-id [channel]
-  (-> (async/originating-request channel)
-      (:uri)
-      (subs 1)))
-
 (defn save-session [channel]
-  (let [unique-id (session->unique-id channel)
+  (let [unique-id (core/session->unique-id channel)
         start-time (Instant/now)]
     (cache/save-session unique-id start-time)))
 
@@ -32,5 +28,6 @@
                  (swap! channel-store (fn [store] (remove #(= channel %) store)))
                  (log/info "close code:" code "reason:" reason))
    :on-message (fn [ch m]
+                 (core/save-message ch m)
                  ; do something below saved to cache and send back etc
                  (async/send! ch (apply str (reverse m))))})

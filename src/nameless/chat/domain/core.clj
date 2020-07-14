@@ -30,7 +30,7 @@
   (async/send! channel "Ready to send nameless feedbacks !"))
 
 (defn retry-save-message [url message author]
-  ;This has to be fixed
+  ;This has to be fixed, control comes till this point, use a retry lib
   (repeatedly (:save-retry-limit (:message env))
               (db/add! url message author)))
 
@@ -46,3 +46,7 @@
   (let [uid (session->unique-id channel)]
     (swap! channel-store (fn [store] (remove #(= channel %) store)))
     (cache/delete-session uid)))
+
+(defn create-meeting [url]
+  {:status :success
+   :body "ok"})

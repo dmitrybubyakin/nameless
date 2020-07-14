@@ -3,20 +3,24 @@
     [immutant.web :as web]
     [immutant.web.middleware :as web-middleware]
     [compojure.route :as route]
-    [compojure.core :refer (ANY GET defroutes)]
+    [compojure.core :refer :all]
     [ring.util.response :refer (response redirect content-type)]
     [nameless.chat.sessions :as sessions]
     [nameless.chat.domain.core :as core]
-    [ring.middleware.params :refer [wrap-params]]
+    [nameless.handler :as handler]
+    [ring.middleware.json :refer [wrap-json-response wrap-json-body wrap-json-params]]
     [nameless.migrations :as mg]
     [clojure.tools.logging :as log]
     [nameless.datasource :as ds]
-    [config.core :refer [env]])
+    [config.core :refer [env]]
+    [ring.middleware.defaults :refer :all])
   (:gen-class))
 
-(defroutes routes
-           (GET "/" [] "Hello ####")
-           (GET "/sessions" [] (str "Active Sessions - " (core/active-sessions)))
+(defroutes app-routes
+           (GET "/" [] "Welcome to the world of anonymity !")
+           (context "/api" []
+             (GET "/sessions" [] (str "Active Sessions - " (core/active-sessions)))
+             (POST "/v1/meeting" req (handler/create-meeting req)))
            (route/resources "/"))
 
 (defn run-job [command]
@@ -28,8 +32,9 @@
 (defn start-api-server []
   (mount.core/start)
   (web/run
-    (-> routes
-        (wrap-params)
+    (-> app-routes
+        (wrap-json-params)
+        (wrap-defaults (assoc-in site-defaults [:security :anti-forgery] false))
         ;; wrap the handler with websocket support
         ;; websocket requests will go to the callbacks, ring requests to the handler
         (web-middleware/wrap-websocket sessions/websocket-callbacks))
@@ -38,7 +43,7 @@
 
 (defn -main [& [args]]
   (case args
-    "api" (start-api-server)
+    "server" (start-api-server)
     "migrate" (run-job "migrate")
     "rollback" (run-job "rollback")
     "help" (do (prn "A Clojure service")

@@ -7,16 +7,16 @@
             [honeysql.helpers :refer :all :as h]
             [honeysql.core :as s]))
 
-(defn add! [url content author]
+(defn add! [url message author]
   (try
-    (let [data {:url url :content content :author author}
+    (let [data {:uuid url :message message :author author}
           status (jdbc/execute! (ds/conn)
                                 (-> (h/insert-into :chat)
                                     (values [data])
                                     (s/format))
                                 {:transaction? false})]
       (if (= 1 (first status))
-        content
+        message
         :failure))
     (catch Exception e
       (log/error "Failed to save chat : " (.getMessage e))

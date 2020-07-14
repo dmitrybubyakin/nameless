@@ -17,7 +17,10 @@
                  [org.postgresql/postgresql "42.2.8"]
                  [honeysql "0.9.10"]
                  [cheshire "5.10.0"]
-                 [clj-time "0.15.2"]]
+                 [clj-time "0.15.2"]
+                 [ring/ring-json "0.5.0"]
+                 [ring/ring-defaults "0.3.2"]
+                 [prismatic/schema "1.1.12"]]
   :main ^:skip-aot nameless.core
   :uberjar-name "nameless-standalone.jar"
   :target-path "target/%s"

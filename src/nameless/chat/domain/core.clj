@@ -19,15 +19,28 @@
       (:uri)
       (subs 1)))
 
+(defn broadcast-message [channel content]
+  (let [chs (cache/get-connected-clients (session->unique-id channel))]
+    (doseq [ch chs]
+      (async/send! ch content))))
+
+(defn prepare-message [channel type message]
+  (->> (case type
+         :entry {:type "message", :message "Joined the chat"}
+         :default {:type "message", :message message})
+       (generate-string)
+       (broadcast-message channel)))
+
 (defn save-session [channel]
   (let [uid (session->unique-id channel)
         start-time (c/to-long (t/now))]
-    (cache/save-session uid start-time)))
+    (cache/save-session uid start-time channel)))
 
 (defn create-session [channel]
   (swap! channel-store conj channel)
   (save-session channel)
-  (async/send! channel "Ready to send nameless feedbacks !"))
+  (log/info "New client connected !")
+  (prepare-message channel :entry "Joined the chat"))
 
 (defn retry-save-message [url message author]
   ;This has to be fixed, control comes till this point, use a retry lib
@@ -40,7 +53,7 @@
         content (db/add! url message author)]
     (if (= content :failure)
       (retry-save-message url message author)
-      (async/send! channel content))))
+      (broadcast-message channel message))))
 
 (defn remove-session [channel]
   (let [uid (session->unique-id channel)]

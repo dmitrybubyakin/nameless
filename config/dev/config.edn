@@ -20,5 +20,5 @@
            :server-name        "localhost"
            :port-number        5432
            :register-mbeans    false}
- :server  {:port 3000}
+ :server  {:port 8080}
  :message {:save-retry-limit 3}}

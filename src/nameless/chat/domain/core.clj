@@ -11,9 +11,6 @@
 
 (def channel-store (atom []))
 
-(defn active-sessions []
-  (count (cache/active-sessions)))
-
 (defn session->unique-id [channel]
   (-> (async/originating-request channel)
       (:uri)
@@ -64,3 +61,11 @@
 (defn create-meeting [url]
   {:status :success
    :body "ok"})
+
+(defn active-room? [url]
+  (let [active-clients (or (cache/get-connected-clients url) ())]
+    (if (> (count active-clients) 0)
+      {:status :success
+       :data true}
+      {:status :success
+       :data false})))

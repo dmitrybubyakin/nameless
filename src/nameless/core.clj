@@ -13,14 +13,15 @@
     [clojure.tools.logging :as log]
     [nameless.datasource :as ds]
     [config.core :refer [env]]
-    [ring.middleware.defaults :refer :all])
+    [ring.middleware.defaults :refer :all]
+    [ring.middleware.cors :refer [wrap-cors]])
   (:gen-class))
 
 (defroutes app-routes
            (GET "/" [] "Welcome to the world of anonymity !")
-           (context "/api" []
-             (GET "/sessions" [] (str "Active Sessions - " (core/active-sessions)))
-             (POST "/v1/meeting" req (handler/create-meeting req)))
+           (context "/api/v1" []
+             (GET "/room/:url" [url] (handler/active-room? url))
+             (POST "/meeting" req (handler/create-meeting req)))
            (route/resources "/"))
 
 (defn run-job [command]
@@ -35,6 +36,8 @@
     (-> app-routes
         (wrap-json-params)
         (wrap-defaults (assoc-in site-defaults [:security :anti-forgery] false))
+        (wrap-cors :access-control-allow-origin [#"http://localhost:3000"]
+                   :access-control-allow-methods [:get :put :post :delete])
         ;; wrap the handler with websocket support
         ;; websocket requests will go to the callbacks, ring requests to the handler
         (web-middleware/wrap-websocket sessions/websocket-callbacks))

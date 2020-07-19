@@ -7,10 +7,9 @@
 (defn respond!
   "response"
   [code response]
-  (let [valid-response (dissoc response :status)]
-    {:status  code
-     :headers {"Content-Type" "application/json"}
-     :body    (json/encode valid-response)}))
+  {:status  code
+   :headers {"Content-Type" "application/json"}
+   :body    (json/encode response)})
 
 (defn- produce-parse-err! [type err]
   (log/error "Error while parsing" type "request" err "!")
@@ -19,9 +18,19 @@
 (defn create-meeting [req]
   (let [request (v/parse v/CreateMeetingReq (:params req))]
     (if (:error request)
-      (produce-parse-err! :add-announcement (:error request))
+      (produce-parse-err! :create-meeting (:error request))
       (let [{:keys [url]} request
             response (dc/create-meeting url)]
         (if (= (:status response) :success)
           (respond! 201 response)
-          (respond! 400 (:error "Failed to create meeting !")))))))
+          (respond! 400 {:status :failure, :body "Failed to create meeting"}))))))
+
+(defn active-room? [url]
+  (let [request (v/parse v/ActiveMeeting? {:url url})]
+    (if (:error request)
+      (produce-parse-err! :check-active-meeting (:error request))
+      (let [{:keys [url]} request
+            response (dc/active-room? url)]
+        (if (= (:status response) :success)
+          (respond! 201 response)
+          (respond! 400 {:status :failure, :body "Failed to get active rooms"}))))))

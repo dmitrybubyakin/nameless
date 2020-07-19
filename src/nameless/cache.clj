@@ -24,12 +24,5 @@
   (update-store uid channel)
   (wcar* (car/set (str session-key uid) start-time)))
 
-(defn get-session
-  [uid]
-  (wcar* (car/get uid)))
-
-(defn active-sessions []
-  (wcar* (car/keys (str session-key "*"))))
-
 (defn delete-session [uid]
   (wcar* (car/del (str session-key uid))))

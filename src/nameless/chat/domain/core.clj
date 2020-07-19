@@ -26,7 +26,7 @@
 
 (defn prepare-message [channel type message]
   (->> (case type
-         :entry {:type "message", :message "Joined the chat"}
+         :entry {:type "entry", :message message}
          :default {:type "message", :message message})
        (generate-string)
        (broadcast-message channel)))
@@ -37,10 +37,11 @@
     (cache/save-session uid start-time channel)))
 
 (defn create-session [channel]
-  (swap! channel-store conj channel)
-  (save-session channel)
-  (log/info "New client connected !")
-  (prepare-message channel :entry "Joined the chat"))
+  (let [username (:query-string (async/originating-request channel))]
+    (swap! channel-store conj channel)
+    (save-session channel)
+    (log/info "New client connected !")
+    (prepare-message channel :entry (str username " joined the chat"))))
 
 (defn retry-save-message [url message author]
   ;This has to be fixed, control comes till this point, use a retry lib

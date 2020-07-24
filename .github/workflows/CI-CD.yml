@@ -1,10 +1,15 @@
-name: CI-CD
+name: Build, Publish to Docker and Deploy to Cloud Run
 
 on:
   push:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+
+env:
+  PROJECT_ID: ${{ secrets.RUN_PROJECT }}
+  RUN_REGION: us-central1
+  SERVICE_NAME: namelss
 
 jobs:
   build:
@@ -13,17 +18,44 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Install dependencies
       run: lein deps
+
     - name: Run tests
       run: lein test
+
     - name: Build project
       run: lein with-profile prod uberjar
+
     - name: DockerHub build
       run: docker build . --file Dockerfile --tag namelss:$(date +%s)
+
     - name: DockerHub Publish
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
         name: ikshitijsingh/namelss
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Setup Gcloud
+      uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        with:
+          version: '290.0.1'
+          service_account_key: ${{ secrets.RUN_SA_KEY }}
+          project_id: ${{ secrets.RUN_PROJECT }}
+
+    - name: Build and publish Gcloud image
+      run: |-
+        gcloud builds submit \
+          --quiet \
+          --tag "gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA"
+
+    - name: Deploy to Gcloud App engine
+      run: |-
+        gcloud run deploy "$SERVICE_NAME" \
+          --quiet \
+          --region "$RUN_REGION" \
+          --image "gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA" \
+          --platform "managed" \
+          --allow-unauthenticated

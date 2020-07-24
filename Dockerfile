@@ -1,4 +1,4 @@
-FROM java:8-alpine
+FROM clojure:openjdk-8-lein-slim-buster
 RUN lein with-profile prod uberjar
 COPY ./target/uberjar/nameless.jar .
 RUN mkdir -p /app /app/resources

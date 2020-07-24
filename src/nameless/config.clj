@@ -9,5 +9,5 @@
   (let [{:keys [type server port name user password]} (:db env)]
     (log/info "Starting db Connection with uri" (format "jdbc:%s://%s:%s/%s?user=%s&password=%s"
                                                         type server port name user password))
-    (format "jdbc:%s://%s:%s/%s?user=%s&password=%s"
+    (format "jdbc:%s://%s:%s/%s?unix_socket=/cloudsql/namelss:asia-south1:namelss&user=%s&password=%s"
             type server port name user password)))

@@ -1,8 +1,4 @@
-FROM clojure:openjdk-8-lein-slim-buster
-RUN lein with-profile prod uberjar
-COPY ./target/uberjar/nameless.jar .
-RUN mkdir -p /app /app/resources
-COPY nameless.jar /app
-WORKDIR /app
-CMD java -jar nameless.jar server
+FROM java:8-alpine
+CMD lein with-profile prod uberjar
+CMD java -jar ./target/uberjar/nameless.jar server
 EXPOSE 8080

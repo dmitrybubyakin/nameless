@@ -1,6 +1,6 @@
 FROM clojure
 COPY . /usr/src/app
 WORKDIR /usr/src/app
-RUN lein with-profile prod uberjar
+RUN mv "$(lein uberjar | sed -n 's/^Created \(.*standalone\.jar\)/\1/p')" nameless.jar
 EXPOSE 8080
-CMD ["java", "-jar", "nameless.jar", "server"]
+CMD ["java", "-jar", "nameless.jar"]

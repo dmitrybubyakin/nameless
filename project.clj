@@ -24,7 +24,7 @@
                  [prismatic/schema "1.1.12"]
                  [ring-cors "0.1.13"]]
   :main ^:skip-aot nameless.core
-  :uberjar-name "nameless.jar"
+  :uberjar-name "nameless-standalone.jar"
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}
              :prod {:resource-paths ["config/prod"]}

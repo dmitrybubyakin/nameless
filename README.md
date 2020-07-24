@@ -1,6 +1,6 @@
 # nameless
 
-![CI-CD](https://github.com/singhkshitij/nameless/workflows/CI-CD/badge.svg?branch=master)
+![.github/workflows/CI-CD.yml](https://github.com/singhkshitij/nameless/workflows/.github/workflows/CI-CD.yml/badge.svg)
 
 Run 
 ```shell script

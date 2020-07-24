@@ -20,11 +20,11 @@ jobs:
     - name: Build project
       run: lein with-profile prod uberjar
     - name: DockerHub build
-      run: docker build . --file Dockerfile --tag told-it:$(date +%s)
+      run: docker build . --file Dockerfile --tag namelss:$(date +%s)
     - name: DockerHub Publish
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
-        name: ikshitijsingh/told-it
+        name: ikshitijsingh/namelss
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
     - name: Build Gcloud Docker image

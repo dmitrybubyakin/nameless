@@ -28,6 +28,9 @@ jobs:
     - name: Build app
       run: lein with-profile prod uberjar
 
+    - name: Copy file to docker directory
+      run: cp /target/uberjar/nameless.jar .
+
     - name: DockerHub build
       run: docker build . --file Dockerfile --tag namelss:$(date +%s)
 

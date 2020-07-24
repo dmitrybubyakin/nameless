@@ -27,22 +27,3 @@ jobs:
         name: ikshitijsingh/namelss
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-    - name: Build Gcloud Docker image
-      run: |
-          docker build . --tag eu.gcr.io/${{ secrets.GCLOUD_PROJECT }}/${{ secrets.GCLOUD_APP_NAME }}/${{ github.ref }}
-    - name: Authenticate into Google Cloud Platform
-      uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
-      with:
-        service_account_email: ${{ secrets.GCLOUD_EMAIL }}
-        service_account_key: ${{ secrets.GCLOUD_AUTH }}
-
-    - name: Configure Docker to use Google Cloud Platform
-      run: "gcloud auth configure-docker --quiet"
-
-    - name: Push image to Google Cloud Container Registry
-      run: docker push eu.gcr.io/${{ secrets.GCLOUD_PROJECT }}/${{ secrets.GCLOUD_APP_NAME }}/${{ github.ref }}
-
-    - name: Install beta commands and deploy on cloud run
-      run: |
-        gcloud components install beta --quiet
-        gcloud beta run deploy ${{ secrets.GCLOUD_APP_NAME }} --quiet --image eu.gcr.io/${{ secrets.GCLOUD_PROJECT }}/${{ secrets.GCLOUD_APP_NAME }}/${{ github.ref }} --project ${{ secrets.GCLOUD_PROJECT }} --region europe-west1 --platform managed

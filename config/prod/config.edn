@@ -1,11 +1,11 @@
 {:cache   {:port 6379
            :host "localhost"}
- :db      {:name     "nameless"
+ :db      {:name     "namelss"
            :type     "postgresql"
            :port     "5432"
            :user     "postgres"
            :server   "localhost"
-           :password ""}
+           :password "Oy2ezC850v5rdjHi"}
  :hikari  {:connection-timeout 2000
            :validation-timeout 1000
            :idle-timeout       60000

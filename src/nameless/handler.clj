@@ -34,3 +34,13 @@
         (if (= (:status response) :success)
           (respond! 201 response)
           (respond! 400 {:status :failure, :data "Failed to create room !"}))))))
+
+(defn get-chats [url]
+  (let [request (v/parse v/GetChatsReq {:url url})]
+    (if (:error request)
+      (produce-parse-err! :get-chats (:error request))
+      (let [{:keys [url]} request
+            response (dc/get-chats url)]
+        (if (= (:status response) :success)
+          (respond! 201 response)
+          (respond! 400 {:status :failure, :data "Failed to create room !"}))))))

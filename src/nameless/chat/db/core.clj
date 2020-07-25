@@ -51,3 +51,18 @@
     (catch Exception e
       (log/error "Failed to check active room : " (.getMessage e))
       :failure)))
+
+(defn get-chats [url]
+  (try
+    (let [response (->> (-> {:select   [:data :owner :type [:created_at :dt]]
+                             :from     [:chat]
+                             :where    [:= :url url]
+                             :order-by [[:created_at :desc]]}
+                            (s/format))
+                        (jdbc/query (ds/conn)))]
+      (if (empty? response)
+        ()
+        response))
+    (catch Exception e
+      (log/error "Failed to get chat history : " (.getMessage e))
+      :failure)))

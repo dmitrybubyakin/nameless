@@ -66,3 +66,10 @@
       {:status :failure}
       {:status :success
        :data   response})))
+
+(defn get-chats [url]
+  (let [response (db/get-chats url)]
+    (if (= :failure response)
+      {:status :failure}
+      {:status :success
+       :data   response})))

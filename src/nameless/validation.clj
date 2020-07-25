@@ -10,6 +10,9 @@
 (s/defschema ActiveMeeting?
   {:url s/Str})
 
+(s/defschema GetChatsReq
+  {:url s/Str})
+
 (defn coerce-to-int [n]
   (if (string? n)
     (Integer/parseInt n)

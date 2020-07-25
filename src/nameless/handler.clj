@@ -15,16 +15,6 @@
   (log/error "Error while parsing" type "request" err "!")
   (respond! 500 (str "Error while parsing request " err)))
 
-(defn create-meeting [req]
-  (let [request (v/parse v/CreateMeetingReq (:params req))]
-    (if (:error request)
-      (produce-parse-err! :create-meeting (:error request))
-      (let [{:keys [url]} request
-            response (dc/create-meeting url)]
-        (if (= (:status response) :success)
-          (respond! 201 response)
-          (respond! 400 {:status :failure, :body "Failed to create meeting"}))))))
-
 (defn active-room? [url]
   (let [request (v/parse v/ActiveMeeting? {:url url})]
     (if (:error request)
@@ -33,4 +23,14 @@
             response (dc/active-room? url)]
         (if (= (:status response) :success)
           (respond! 201 response)
-          (respond! 400 {:status :failure, :body "Failed to get active rooms"}))))))
+          (respond! 400 {:status :failure, :data "Failed to get active rooms !"}))))))
+
+(defn create-room [url host]
+  (let [request (v/parse v/CreateRoomReq {:url url :host host})]
+    (if (:error request)
+      (produce-parse-err! :create-new-room (:error request))
+      (let [{:keys [url host]} request
+            response (dc/create-room url host)]
+        (if (= (:status response) :success)
+          (respond! 201 response)
+          (respond! 400 {:status :failure, :data "Failed to create room !"}))))))

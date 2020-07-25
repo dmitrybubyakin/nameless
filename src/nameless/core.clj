@@ -21,7 +21,7 @@
            (GET "/" [] "Welcome to the world of anonymity !")
            (context "/api/v1" []
              (GET "/room/:url" [url] (handler/active-room? url))
-             (POST "/meeting" req (handler/create-meeting req)))
+             (POST "/room/:url" [url host] (handler/create-room url host)))
            (route/resources "/"))
 
 (defn run-job [command]

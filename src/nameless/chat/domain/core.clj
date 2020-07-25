@@ -28,44 +28,29 @@
        (generate-string)
        (broadcast-message channel)))
 
-(defn save-session [channel]
-  (let [uid (session->unique-id channel)
-        start-time (c/to-long (t/now))]
-    (cache/save-session uid start-time channel)))
-
-(defn create-session [channel]
+(defn create-ws-session [channel]
   (let [username (:query-string (async/originating-request channel))]
     (swap! channel-store conj channel)
-    (save-session channel)
     (log/info "New client connected !")
     (prepare-message channel :entry (str username " joined the chat"))))
-
-(defn retry-save-message [url message author]
-  ;This has to be fixed, control comes till this point, use a retry lib
-  (repeatedly (:save-retry-limit (:message env))
-              (db/add! url message author)))
 
 (defn save-message [channel m]
   (let [data (decode m)
         {:keys [message author url]} (wk/keywordize-keys data)
         content (db/add! url message author)]
-    (if (= content :failure)
-      (retry-save-message url message author)
-      (broadcast-message channel message))))
-
-(defn remove-session [channel]
-  (let [uid (session->unique-id channel)]
-    (swap! channel-store (fn [store] (remove #(= channel %) store)))
-    (cache/delete-session uid)))
-
-(defn create-meeting [url]
-  {:status :success
-   :body "ok"})
+    (broadcast-message channel message)))
 
 (defn active-room? [url]
-  (let [active-clients (or (cache/get-connected-clients url) ())]
-    (if (> (count active-clients) 0)
+  (let [response  (db/room-active? url)]
+    (if (= :failure response)
+      {:status :failure}
       {:status :success
-       :data true}
+       :data response})))
+
+(defn create-room [url host]
+  (let [set-active true
+        response  (db/create-room! url host set-active)]
+    (if (= :failure response)
+      {:status :failure}
       {:status :success
-       :data false})))
+       :data response})))

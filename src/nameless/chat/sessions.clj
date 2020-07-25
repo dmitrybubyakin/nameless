@@ -7,9 +7,8 @@
 (def websocket-callbacks
   "WebSocket hooks"
   {:on-open    (fn [channel]
-                 (core/create-session channel))
+                 (core/create-ws-session channel))
    :on-close   (fn [channel {:keys [code reason]}]
-                 (core/remove-session channel)
                  (log/info "close code:" code "reason:" reason))
    :on-message (fn [channel m]
                  (core/save-message channel m))})

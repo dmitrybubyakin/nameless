@@ -3,8 +3,9 @@
             [schema.coerce :as c]
             [clojure.walk :as wk]))
 
-(s/defschema CreateMeetingReq
-  {:url s/Str})
+(s/defschema CreateRoomReq
+  {:url s/Str
+   :host s/Str})
 
 (s/defschema ActiveMeeting?
   {:url s/Str})

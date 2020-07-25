@@ -21,16 +21,16 @@
 
 (defn prepare-message [channel type message]
   (->> (case type
-         :entry {:type "entry", :message message}
+         :entry {:type "entry", :message  message}
          :default {:type "message", :message message})
        (generate-string)
        (broadcast-message channel)))
 
 (defn save-message
   ([channel m] (let [data (decode m)
-                     {:keys [message author url]} (wk/keywordize-keys data)
-                     content (db/add! url message author :message)]
-                 (broadcast-message channel message)))
+                     {:keys [data owner url]} (wk/keywordize-keys data)
+                     saved-data (db/add! url data owner :message)]
+                 (prepare-message channel :default saved-data)))
   ([url message owner type]
    (db/add! url message owner type)))
 
@@ -41,7 +41,7 @@
     (cache/save-session uid channel)
     (save-message uid message owner :entry)
     (log/info owner "joined the chat" uid)
-    (prepare-message channel :entry message)))
+    (prepare-message channel :entry {:data message})))
 
 (defn remove-ws-session [channel]
   (let [owner (:query-string (async/originating-request channel))
@@ -50,7 +50,7 @@
     (cache/remove-session uid channel)
     (save-message uid message owner :entry)
     (log/info owner "left the chat" uid)
-    (prepare-message channel :entry message)))
+    (prepare-message channel :entry {:data message})))
 
 (defn active-room? [url]
   (let [response (db/room-active? url)]

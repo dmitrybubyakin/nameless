@@ -9,8 +9,6 @@
             [config.core :refer [env]]
             [clojure.tools.logging :as log]))
 
-(def channel-store (atom []))
-
 (defn session->unique-id [channel]
   (-> (async/originating-request channel)
       (:uri)
@@ -28,34 +26,43 @@
        (generate-string)
        (broadcast-message channel)))
 
+(defn save-message
+  ([channel m] (let [data (decode m)
+                     {:keys [message author url]} (wk/keywordize-keys data)
+                     content (db/add! url message author :message)]
+                 (broadcast-message channel message)))
+  ([url message owner type]
+   (db/add! url message owner type)))
+
 (defn create-ws-session [channel]
-  (let [username (:query-string (async/originating-request channel))
-        uid (session->unique-id channel)]
-    (swap! channel-store conj channel)
+  (let [owner (:query-string (async/originating-request channel))
+        uid (session->unique-id channel)
+        message (str owner " joined the chat")]
     (cache/save-session uid channel)
-    (log/info username "joined the chat" uid)
-    (prepare-message channel :entry (str username " joined the chat"))))
+    (save-message uid message owner :entry)
+    (log/info owner "joined the chat" uid)
+    (prepare-message channel :entry message)))
 
 (defn remove-ws-session [channel]
-  (swap! channel-store (fn [store] (remove #(= channel %) store))))
-
-(defn save-message [channel m]
-  (let [data (decode m)
-        {:keys [message author url]} (wk/keywordize-keys data)
-        content (db/add! url message author)]
-    (broadcast-message channel message)))
+  (let [owner (:query-string (async/originating-request channel))
+        uid (session->unique-id channel)
+        message (str owner " left the chat")]
+    (cache/remove-session uid channel)
+    (save-message uid message owner :entry)
+    (log/info owner "left the chat" uid)
+    (prepare-message channel :entry message)))
 
 (defn active-room? [url]
-  (let [response  (db/room-active? url)]
+  (let [response (db/room-active? url)]
     (if (= :failure response)
       {:status :failure}
       {:status :success
-       :data response})))
+       :data   response})))
 
 (defn create-room [url host]
   (let [set-active true
-        response  (db/create-room! url host set-active)]
+        response (db/create-room! url host set-active)]
     (if (= :failure response)
       {:status :failure}
       {:status :success
-       :data response})))
+       :data   response})))

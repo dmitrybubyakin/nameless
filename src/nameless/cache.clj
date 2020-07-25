@@ -15,3 +15,11 @@
 (defn save-session
   [uid channel]
   (update-store uid channel))
+
+(defn remove-session [uid channel]
+  (let [uid-key (keyword uid)
+        active-sessions (or (uid-key @channel-store) ())]
+    (if (not-empty active-sessions)
+      (swap! channel-store assoc-in [uid-key] (remove #(= channel %) active-sessions)))))
+
+

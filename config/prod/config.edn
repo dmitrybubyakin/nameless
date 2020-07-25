@@ -16,7 +16,7 @@
            :adapter            "postgresql"
            :username           "postgres"
            :password           ""
-           :database-name      "nameless"
+           :database-name      "namelss"
            :server-name        "localhost"
            :port-number        5432
            :register-mbeans    false}

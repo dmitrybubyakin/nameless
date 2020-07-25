@@ -7,9 +7,9 @@
             [honeysql.helpers :refer :all :as h]
             [honeysql.core :as s]))
 
-(defn add! [url message author]
+(defn add! [url message owner type]
   (try
-    (let [data {:uuid url :message message :author author}
+    (let [data {:url url :data message :owner owner :type (name type)}
           status (jdbc/execute! (ds/conn)
                                 (-> (h/insert-into :chat)
                                     (values [data])

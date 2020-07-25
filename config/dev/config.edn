@@ -1,6 +1,6 @@
 {:cache   {:port 6379
            :host "localhost"}
- :db      {:name     "nameless"
+ :db      {:name     "namelss"
            :type     "postgresql"
            :port     "5432"
            :user     "postgres"
@@ -16,7 +16,7 @@
            :adapter            "postgresql"
            :username           "postgres"
            :password           ""
-           :database-name      "nameless"
+           :database-name      "namelss"
            :server-name        "localhost"
            :port-number        5432
            :register-mbeans    false}

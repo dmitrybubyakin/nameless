@@ -29,10 +29,15 @@
        (broadcast-message channel)))
 
 (defn create-ws-session [channel]
-  (let [username (:query-string (async/originating-request channel))]
+  (let [username (:query-string (async/originating-request channel))
+        uid (session->unique-id channel)]
     (swap! channel-store conj channel)
-    (log/info "New client connected !")
+    (cache/save-session uid channel)
+    (log/info username "joined the chat" uid)
     (prepare-message channel :entry (str username " joined the chat"))))
+
+(defn remove-ws-session [channel]
+  (swap! channel-store (fn [store] (remove #(= channel %) store))))
 
 (defn save-message [channel m]
   (let [data (decode m)

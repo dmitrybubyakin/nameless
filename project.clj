@@ -8,7 +8,6 @@
                  [compojure "1.6.1"]
                  [ring/ring-core "1.7.1"]
                  [org.clojure/tools.logging "1.1.0"]
-                 [com.taoensso/carmine "2.19.1"]
                  [yogthos/config "1.1.7"]
                  [mount "0.1.16"]
                  [ragtime "0.8.0"]

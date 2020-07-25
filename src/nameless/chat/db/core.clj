@@ -45,7 +45,6 @@
                             (s/format))
                         (jdbc/query (ds/conn))
                         (first))]
-      (prn "response" response)
       (if (empty? response)
         {:active false}
         response))

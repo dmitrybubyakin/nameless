@@ -40,19 +40,19 @@
 (defn create-ws-session [channel]
   (let [owner (:query-string (async/originating-request channel))
         uid (session->unique-id channel)
-        message (str owner " joined the chat")]
+        message (str owner " joined the room")]
     (cache/save-session uid channel)
     (save-message uid message owner :entry)
-    (log/info owner "joined the chat" uid)
+    (log/info message uid)
     (prepare-message channel :entry {:data message})))
 
 (defn remove-ws-session [channel]
   (let [owner (:query-string (async/originating-request channel))
         uid (session->unique-id channel)
-        message (str owner " left the chat")]
+        message (str owner " left the room")]
     (cache/remove-session uid channel)
     (save-message uid message owner :entry)
-    (log/info owner "left the chat" uid)
+    (log/info message uid)
     (prepare-message channel :entry {:data message})))
 
 (defn active-room? [url]

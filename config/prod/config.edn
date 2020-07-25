@@ -4,7 +4,7 @@
            :type     "postgresql"
            :port     "5432"
            :user     "postgres"
-           :server   "172.25.32.3"
+           :server   "127.0.0.1"
            :password "Oy2ezC850v5rdjHi"}
  :hikari  {:connection-timeout 2000
            :validation-timeout 1000

@@ -7,6 +7,21 @@
             [honeysql.helpers :refer :all :as h]
             [honeysql.core :as s]))
 
+(defn get-chat-data [url message owner]
+  (try
+    (let [response (->> (-> {:select [:url :data :owner [:created_at :dt]]
+                             :from   [:chat]
+                             :where  [:and [:= :url url] [:= :data message] [:= :owner owner]]}
+                            (s/format))
+                        (jdbc/query (ds/conn))
+                        (first))]
+      (if (empty? response)
+        :failure
+        response))
+    (catch Exception e
+      (log/error "Failed to get chat message : " (.getMessage e))
+      :failure)))
+
 (defn add! [url message owner type]
   (try
     (let [data {:url url :data message :owner owner :type (name type)}
@@ -16,7 +31,7 @@
                                     (s/format))
                                 {:transaction? false})]
       (if (= 1 (first status))
-        data
+        (get-chat-data url message owner)
         :failure))
     (catch Exception e
       (log/error "Failed to save chat : " (.getMessage e))

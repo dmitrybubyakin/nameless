@@ -14,6 +14,9 @@
       (:uri)
       (subs 1)))
 
+(defn transform-date [response]
+  (map (fn [x] (update-in x [:dt] #(.getTime %))) response))
+
 (defn broadcast-message [channel content]
   (let [chs (cache/get-connected-clients (session->unique-id channel))]
     (doseq [ch chs]
@@ -21,7 +24,7 @@
 
 (defn prepare-message [channel type message]
   (->> (case type
-         :entry {:type "entry", :message  message}
+         :entry {:type "entry", :message message}
          :default {:type "message", :message message})
        (generate-string)
        (broadcast-message channel)))
@@ -71,5 +74,5 @@
   (let [response (db/get-chats url)]
     (if (= :failure response)
       {:status :failure}
-      {:status :success
-       :data   response})))
+      (->> (transform-date response)
+           (assoc {:status :success} :data)))))

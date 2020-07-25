@@ -6,8 +6,8 @@
 (defstate env :start (load-env))
 
 (defn db-jdbc-uri []
-  (let [{:keys [type server port name user password]} (:db env)]
-    (log/info "Starting db Connection with uri" (format "jdbc:%s://%s:%s/%s?user=%s&password=%s"
-                                                        type server port name user password))
-    (format "jdbc:%s://%s:%s/%s?unix_socket=/cloudsql/namelss:asia-south1:namelss&user=%s&password=%s"
-            type server port name user password)))
+  (let [{:keys [type server port name user password]} (:db env)
+        uri (format "jdbc:%s://%s:%s/%s?user=%s&password=%s"
+                    type server port name user password)]
+    (log/info "Starting db Connection with uri" uri)
+    uri))

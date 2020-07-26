@@ -14,9 +14,9 @@
            :maximum-pool-size  50
            :pool-name          "db-pool"
            :adapter            "postgresql"
-           :username           "dch7rbcqnusnib"
+           :username           "spalimkwucnblx"
            :password           "d3cebbcbf8d94d6db0c9a8dd1bec5caa7a45e62f15955886651d635b728bc7cc"
-           :database-name      "spalimkwucnblx"
+           :database-name      "dch7rbcqnusnib"
            :server-name        "ec2-52-202-66-191.compute-1.amazonaws.com"
            :port-number        5432
            :register-mbeans    false}

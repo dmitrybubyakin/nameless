@@ -4,7 +4,7 @@
            :type     "postgresql"
            :port     "5432"
            :user     "postgres"
-           :server   "namelss:us-central1:namelss-db "
+           :server   "namelss:us-central1:namelss-db"
            :password "Oy2ezC850v5rdjHi"}
  :hikari  {:connection-timeout 2000
            :validation-timeout 1000

@@ -17,7 +17,7 @@
            :username           "postgres"
            :password           "Oy2ezC850v5rdjHi"
            :database-name      "namelss"
-           :server-name        "namelss:us-central1:namelss-db "
+           :server-name        "namelss:us-central1:namelss-db"
            :port-number        5432
            :register-mbeans    false}
  :server  {:port 8080}

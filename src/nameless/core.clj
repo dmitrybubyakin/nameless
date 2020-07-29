@@ -43,7 +43,7 @@
         ;; websocket requests will go to the callbacks, ring requests to the handler
         (web-middleware/wrap-websocket sessions/websocket-callbacks))
     {"port" (:port (:server env))})
-  (log/info (str "Running webserver at http://127.0.0.1:" (:port (:server env)))))
+  (log/info (str "Running webserver at port " (:port (:server env)))))
 
 (defn -main [& [args]]
   (case args

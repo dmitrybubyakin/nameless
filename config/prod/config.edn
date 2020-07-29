@@ -1,11 +1,11 @@
 {:cache   {:port 6379
            :host "localhost"}
- :db      {:name     "dch7rbcqnusnib"
+ :db      {:name     "gnprembr"
            :type     "postgresql"
            :port     "5432"
-           :user     "spalimkwucnblx"
-           :server   "ec2-52-202-66-191.compute-1.amazonaws.com"
-           :password "d3cebbcbf8d94d6db0c9a8dd1bec5caa7a45e62f15955886651d635b728bc7cc"}
+           :user     "gnprembr"
+           :server   "totto.db.elephantsql.com"
+           :password "PGtjhT0eWNTKUfFIboZ0vdn0Hzd3pYL1"}
  :hikari  {:connection-timeout 2000
            :validation-timeout 1000
            :idle-timeout       60000
@@ -14,10 +14,10 @@
            :maximum-pool-size  50
            :pool-name          "db-pool"
            :adapter            "postgresql"
-           :username           "spalimkwucnblx"
-           :password           "d3cebbcbf8d94d6db0c9a8dd1bec5caa7a45e62f15955886651d635b728bc7cc"
-           :database-name      "dch7rbcqnusnib"
-           :server-name        "ec2-52-202-66-191.compute-1.amazonaws.com"
+           :username           "gnprembr"
+           :password           "PGtjhT0eWNTKUfFIboZ0vdn0Hzd3pYL1"
+           :database-name      "gnprembr"
+           :server-name        "totto.db.elephantsql.com"
            :port-number        5432
            :register-mbeans    false}
  :server  {:port 8080}

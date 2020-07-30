@@ -5,7 +5,7 @@
            :port     "5432"
            :user     "postgres"
            :server   "database"
-           :password ""}
+           :password "Nameless@786"}
  :hikari  {:connection-timeout 2000
            :validation-timeout 1000
            :idle-timeout       60000
@@ -15,7 +15,7 @@
            :pool-name          "db-pool"
            :adapter            "postgresql"
            :username           "postgres"
-           :password           ""
+           :password           "Nameless@786"
            :database-name      "namelss"
            :server-name        "database"
            :port-number        5432

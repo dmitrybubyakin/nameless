@@ -1,11 +1,11 @@
 {:cache   {:port 6379
            :host "localhost"}
- :db      {:name     "namelss"
+ :db      {:name     "gnprembr"
            :type     "postgresql"
            :port     "5432"
-           :user     "postgres"
-           :server   "localhost"
-           :password ""}
+           :user     "gnprembr"
+           :server   "otto.db.elephantsql.com"
+           :password "PGtjhT0eWNTKUfFIboZ0vdn0Hzd3pYL1"}
  :hikari  {:connection-timeout 2000
            :validation-timeout 1000
            :idle-timeout       60000
@@ -14,10 +14,10 @@
            :maximum-pool-size  50
            :pool-name          "db-pool"
            :adapter            "postgresql"
-           :username           "postgres"
-           :password           ""
-           :database-name      "namelss"
-           :server-name        "localhost"
+           :username           "gnprembr"
+           :password           "PGtjhT0eWNTKUfFIboZ0vdn0Hzd3pYL1"
+           :database-name      "gnprembr"
+           :server-name        "otto.db.elephantsql.com"
            :port-number        5432
            :register-mbeans    false}
  :server  {:port 8080}

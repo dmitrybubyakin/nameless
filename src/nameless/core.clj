@@ -38,7 +38,7 @@
     (-> app-routes
         (wrap-json-params)
         (wrap-defaults (assoc-in site-defaults [:security :anti-forgery] false))
-        (wrap-cors :access-control-allow-origin [#"http://localhost:3000"]
+        (wrap-cors :access-control-allow-origin [#"https://namelss.com"]
                    :access-control-allow-methods [:get :put :post :delete])
         ;; wrap the handler with websocket support
         ;; websocket requests will go to the callbacks, ring requests to the handler

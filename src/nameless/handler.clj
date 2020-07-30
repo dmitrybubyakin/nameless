@@ -22,7 +22,7 @@
       (let [{:keys [url]} request
             response (dc/active-room? url)]
         (if (= (:status response) :success)
-          (respond! 201 response)
+          (respond! 200 response)
           (respond! 400 {:status :failure, :data "Failed to get active rooms !"}))))))
 
 (defn create-room [url host]
@@ -32,7 +32,7 @@
       (let [{:keys [url host]} request
             response (dc/create-room url host)]
         (if (= (:status response) :success)
-          (respond! 201 response)
+          (respond! 200 response)
           (respond! 400 {:status :failure, :data "Failed to create room !"}))))))
 
 (defn get-chats [url]
@@ -42,5 +42,5 @@
       (let [{:keys [url]} request
             response (dc/get-chats url)]
         (if (= (:status response) :success)
-          (respond! 201 response)
+          (respond! 200 response)
           (respond! 400 {:status :failure, :data "Failed to create room !"}))))))

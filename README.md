@@ -17,4 +17,5 @@ en0: flags=8863<UP,BROADCAST,SMART,RUNNING,SIMPLEX,MULTICAST> mtu 1500
 ```shell script
 docker pull ikshitijsingh/namelss:latest
 docker run --add-host=database:192.168.43.8 ikshitijsingh/namelss:latest
+docker run --network="host" ikshitijsingh/namelss:latest
 ```

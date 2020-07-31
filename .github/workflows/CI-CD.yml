@@ -32,24 +32,24 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Setup Gcloud
-      uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
-      with:
-        version: '290.0.1'
-        service_account_key: ${{ secrets.RUN_SA_KEY }}
-        project_id: ${{ secrets.RUN_PROJECT }}
-
-    - name: Build and publish Gcloud image
-      run: |-
-        gcloud builds submit \
-          --quiet \
-          --tag "gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA"
-
-    - name: Deploy to Gcloud App engine
-      run: |-
-        gcloud run deploy "$SERVICE_NAME" \
-          --quiet \
-          --region "$RUN_REGION" \
-          --image "gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA" \
-          --platform "managed" \
-          --allow-unauthenticated
+#    - name: Setup Gcloud
+#      uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+#      with:
+#        version: '290.0.1'
+#        service_account_key: ${{ secrets.RUN_SA_KEY }}
+#        project_id: ${{ secrets.RUN_PROJECT }}
+#
+#    - name: Build and publish Gcloud image
+#      run: |-
+#        gcloud builds submit \
+#          --quiet \
+#          --tag "gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA"
+#
+#    - name: Deploy to Gcloud App engine
+#      run: |-
+#        gcloud run deploy "$SERVICE_NAME" \
+#          --quiet \
+#          --region "$RUN_REGION" \
+#          --image "gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA" \
+#          --platform "managed" \
+#          --allow-unauthenticated

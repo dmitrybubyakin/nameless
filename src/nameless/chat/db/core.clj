@@ -81,3 +81,17 @@
     (catch Exception e
       (log/error "Failed to get chat history : " (.getMessage e))
       :failure)))
+
+(defn message-exists? [uid message owner]
+  (try
+    (let [response (->> (-> {:select [:id]
+                             :from   [:chat]
+                             :where  [:and [:= :url uid] [:= :data message] [:= :owner owner]]}
+                            (s/format))
+                        (jdbc/query (ds/conn)))]
+      (if (empty? response)
+        false
+        true))
+    (catch Exception e
+      (log/error "Failed to get existing message : " (.getMessage e))
+      :failure)))

@@ -40,20 +40,20 @@
 (defn create-ws-session [channel]
   (let [owner (:query-string (async/originating-request channel))
         uid (session->unique-id channel)
-        message (str owner " joined the room")]
+        message (str owner " joined the room")
+        message-exists? (db/message-exists? uid message owner)]
     (cache/save-session uid channel)
-    (save-message uid message owner :entry)
     (log/info message uid)
-    (prepare-message channel :entry {:data message})))
+    (if (false? message-exists?)
+      (save-message uid message owner :entry)
+      (prepare-message channel :entry {:data message}))))
 
 (defn remove-ws-session [channel]
   (let [owner (:query-string (async/originating-request channel))
         uid (session->unique-id channel)
         message (str owner " left the room")]
     (cache/remove-session uid channel)
-    (save-message uid message owner :entry)
-    (log/info message uid)
-    (prepare-message channel :entry {:data message})))
+    (log/info message uid)))
 
 (defn active-room? [url]
   (let [response (db/room-active? url)]

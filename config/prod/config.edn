@@ -3,9 +3,9 @@
  :db      {:name     "namelss"
            :type     "postgresql"
            :port     "5432"
-           :user     "namelss"
-           :server   "/cloudsql/34.67.123.131"
-           :password "Oy2ezC850v5rdjHi"}
+           :user     "postgres"
+           :server   "127.0.0.1"
+           :password "nameLess@786p"}
  :hikari  {:connection-timeout 2000
            :validation-timeout 1000
            :idle-timeout       60000
@@ -14,10 +14,10 @@
            :maximum-pool-size  50
            :pool-name          "db-pool"
            :adapter            "postgresql"
-           :username           "namelss"
-           :password           "Oy2ezC850v5rdjHi"
+           :username           "postgres"
+           :password           "nameLess@786p"
            :database-name      "namelss"
-           :server-name        "/cloudsql/34.67.123.131"
+           :server-name        "127.0.0.1"
            :port-number        5432
            :register-mbeans    false}
  :server  {:port 8080}

@@ -44,7 +44,7 @@
         message-exists? (db/message-exists? uid message owner)]
     (cache/save-session uid channel)
     (log/info message uid)
-    (if (false? message-exists?)
+    (when (false? message-exists?)
       (save-message uid message owner :entry)
       (prepare-message channel :entry {:data message}))))
 

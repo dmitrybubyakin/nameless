@@ -1,4 +1,4 @@
-name: Build, Publish to Docker and Deploy to Cloud Run
+name: CI
 
 on:
   push:

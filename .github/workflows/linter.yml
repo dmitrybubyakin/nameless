@@ -1,4 +1,4 @@
-name: Lint errors in project using clj-kondo
+name: Lint
 
 on:
   push:

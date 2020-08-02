@@ -1,5 +1,5 @@
 ## nameless
-![CI](https://github.com/singhkshitij/nameless/workflows/Build,%20Publish%20to%20Docker%20and%20Deploy%20to%20Cloud%20Run/badge.svg)
+![CI](https://github.com/singhkshitij/nameless/workflows/CI/badge.svg)
 [![codecov](https://codecov.io/gh/singhkshitij/nameless/branch/master/graph/badge.svg?token=EFTBG8Y5UD)](https://codecov.io/gh/singhkshitij/nameless)
 
 Run 

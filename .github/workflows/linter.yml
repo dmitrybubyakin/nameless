@@ -7,17 +7,15 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
-
+  lint:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
-      - name: clj-kondo checks
-        uses: DeLaGuardo/clojure-lint-action@master
-        with:
-          clj-kondo-args: --lint src
-          check-name: This is a report name
-          github_token: ${{ secrets.GH_TOKEN }}
+      - name: Install clj-kondo
+        run: sudo ./bin/install-clj-kondo
 
+      - name: Run clj-kondo
+        run: |
+          clj-kondo --lint src --config '{:output {:pattern "::{{level}} file={{filename}},line={{row}},col={{col}}::{{message}}"}}'

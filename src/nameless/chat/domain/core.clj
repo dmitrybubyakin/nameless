@@ -7,8 +7,7 @@
             [clj-time.core :as t]
             [clj-time.coerce :as c]
             [config.core :refer [env]]
-            [clojure.tools.logging :as log]
-            [lock-key.core :refer [encrypt]]))
+            [clojure.tools.logging :as log]))
 
 (defn session->unique-id [channel]
   (-> (async/originating-request channel)
@@ -42,13 +41,12 @@
   (let [owner (:query-string (async/originating-request channel))
         uid (session->unique-id channel)
         message (str owner " joined the room")
-        enc-message (String. ^bytes (encrypt message "^MJ`uHDkb2Fjk?E"))
-        message-exists? (db/message-exists? uid enc-message owner)]
+        message-exists? (db/message-exists? uid message owner)]
     (cache/save-session uid channel)
     (log/info message uid)
     (when (false? message-exists?)
-      (save-message uid enc-message owner :entry)
-      (prepare-message channel :entry {:data enc-message}))))
+      (save-message uid message owner :entry)
+      (prepare-message channel :entry {:data message}))))
 
 (defn remove-ws-session [channel]
   (let [owner (:query-string (async/originating-request channel))

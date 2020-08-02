@@ -21,8 +21,7 @@
                  [ring/ring-defaults "0.3.2"]
                  [com.taoensso/nippy "2.14.0"]
                  [prismatic/schema "1.1.12"]
-                 [ring-cors "0.1.13"]
-                 [lock-key "1.5.0"]]
+                 [ring-cors "0.1.13"]]
   :plugins [[lein-cloverage "1.0.9"]]
   :main ^:skip-aot nameless.core
   :uberjar-name "nameless-standalone.jar"

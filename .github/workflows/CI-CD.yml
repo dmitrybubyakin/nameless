@@ -23,9 +23,14 @@ jobs:
       run: lein test
 
     - name: Run coverage analysis
-      run : |
-      lein cloverage --codecov
-      bash <(curl -s https://codecov.io/bash) -f target/coverage/codecov.json -t 31636264-7624-4ad9-93a2-f96db853cd8f
+      run : lein cloverage --codecov
+
+    - name: Uplaod codecov report
+      uses: codecov/codecov-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        file: ./target/coverage/codecov.json
+        fail_ci_if_error: true
 
     - name: DockerHub build
       run: docker build . --file Dockerfile --tag namelss:$(date +%s)

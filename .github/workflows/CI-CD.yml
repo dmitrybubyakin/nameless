@@ -19,12 +19,14 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Install dependencies
+      run: lein deps
+
     - name: Run tests
       run: lein test
 
     - name: Run coverage analysis
-    - run : lein deps
-    - run : lein cloverage --codecov
+      run : lein cloverage --codecov
 
     - name: Uplaod codecov report
       uses: codecov/codecov-action@v1

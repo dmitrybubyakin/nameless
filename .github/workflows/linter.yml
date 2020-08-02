@@ -1,0 +1,23 @@
+name: Lint errors in project using clj-kondo
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: clj-kondo checks
+        uses: DeLaGuardo/clojure-lint-action@master
+          with:
+            clj-kondo-args: --lint src
+            check-name: This is a report name
+            github_token: ${{ secrets.GH_TOKEN }}
+

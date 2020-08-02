@@ -16,8 +16,8 @@ jobs:
 
       - name: clj-kondo checks
         uses: DeLaGuardo/clojure-lint-action@master
-          with:
-            clj-kondo-args: --lint src
-            check-name: This is a report name
-            github_token: ${{ secrets.GH_TOKEN }}
+        with:
+          clj-kondo-args: --lint src
+          check-name: This is a report name
+          github_token: ${{ secrets.GH_TOKEN }}
 

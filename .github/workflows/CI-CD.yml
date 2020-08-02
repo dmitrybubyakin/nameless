@@ -22,6 +22,11 @@ jobs:
     - name: Run tests
       run: lein test
 
+    - name: Run coverage analysis
+      run : |
+      lein cloverage --codecov
+      bash <(curl -s https://codecov.io/bash) -f target/coverage/codecov.json -t 31636264-7624-4ad9-93a2-f96db853cd8f
+
     - name: DockerHub build
       run: docker build . --file Dockerfile --tag namelss:$(date +%s)
 

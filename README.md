@@ -1,7 +1,6 @@
-# nameless
+## nameless
 
-[![codecov](https://codecov.io/gh/singhkshitij/nameless/branch/master/graph/badge.svg)]
- (https://codecov.io/gh/singhkshitij/nameless)
+[![codecov](https://codecov.io/gh/singhkshitij/nameless/branch/master/graph/badge.svg?token=EFTBG8Y5UD)](https://codecov.io/gh/singhkshitij/nameless)
 
 Run 
 ```shell script

@@ -1,4 +1,6 @@
 # nameless
+[![codecov](https://codecov.io/gh/singhkshitij/nameless/branch/master/graph/badge.svg)]
+ (https://codecov.io/gh/singhkshitij/nameless/)
 
 Run 
 ```shell script

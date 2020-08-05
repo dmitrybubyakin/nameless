@@ -14,7 +14,8 @@
     [nameless.datasource :as ds]
     [config.core :refer [env]]
     [ring.middleware.defaults :refer :all]
-    [ring.middleware.cors :refer [wrap-cors]])
+    [ring.middleware.cors :refer [wrap-cors]]
+    [ring.logger :as rlogger])
   (:gen-class))
 
 (defroutes app-routes
@@ -36,6 +37,7 @@
   (mount.core/start)
   (web/run
     (-> app-routes
+        (rlogger/wrap-with-logger)
         (wrap-json-params)
         (wrap-defaults (assoc-in site-defaults [:security :anti-forgery] false))
         (wrap-cors :access-control-allow-origin [#"https://namelss.com",#"https://localhost:3000"]

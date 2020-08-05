@@ -8,7 +8,6 @@
 (defstate datasource
           :start (let [db-config (:hikari env)]
                    (do
-                     (log/info "Hikari configs " db-config)
                      (mg/migrate)
                      (log/info "Starting DB connection pool")
                      (hikari/make-datasource db-config)))

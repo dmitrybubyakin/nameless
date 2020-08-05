@@ -9,5 +9,5 @@
   (let [{:keys [type server port name user password]} (:db env)
         uri (format "jdbc:%s://%s:%s/%s?user=%s&password=%s"
                     type server port name user password)]
-    (log/info "Starting db Connection with uri" uri)
+    (log/debug "Starting db Connection with uri" uri)
     uri))

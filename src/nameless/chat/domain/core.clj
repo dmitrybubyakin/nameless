@@ -7,7 +7,8 @@
             [clj-time.core :as t]
             [clj-time.coerce :as c]
             [config.core :refer [env]]
-            [clojure.tools.logging :as log]))
+            [clojure.tools.logging :as log])
+  (:import (java.net URLDecoder)))
 
 (defn session->unique-id [channel]
   (-> (async/originating-request channel)
@@ -38,7 +39,8 @@
    (db/add! url message owner type)))
 
 (defn create-ws-session [channel]
-  (let [owner (:query-string (async/originating-request channel))
+  (let [owner (-> (:query-string (async/originating-request channel))
+                  (URLDecoder/decode "UTF-8"))
         uid (session->unique-id channel)
         message (str owner " joined the room")
         message-exists? (db/message-exists? uid message owner)]
@@ -49,7 +51,8 @@
       (prepare-message channel :entry {:data message}))))
 
 (defn remove-ws-session [channel]
-  (let [owner (:query-string (async/originating-request channel))
+  (let [owner (-> (:query-string (async/originating-request channel))
+                  (URLDecoder/decode "UTF-8"))
         uid (session->unique-id channel)
         message (str owner " left the room")]
     (cache/remove-session uid channel)

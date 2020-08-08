@@ -4,7 +4,7 @@
            :type     "postgresql"
            :port     "5432"
            :user     "postgres"
-           :server   "postgres"
+           :server   "localhost"
            :password ""}
  :hikari  {:connection-timeout 2000
            :validation-timeout 1000
@@ -17,7 +17,7 @@
            :username           "postgres"
            :password           ""
            :database-name      "namelss_test"
-           :server-name        "postgres"
+           :server-name        "localhost"
            :port-number        5432
            :register-mbeans    false}
  :server  {:port 8080}

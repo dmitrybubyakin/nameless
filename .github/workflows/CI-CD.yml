@@ -25,7 +25,7 @@ jobs:
         postgresql version: '11'
         postgresql db: 'namelss_test'
         postgresql user: 'postgres'
-      run: lein with-profile test test
+     - run: lein with-profile test test
 
     - name: Run coverage analysis
       run : lein with-profile test cloverage --codecov

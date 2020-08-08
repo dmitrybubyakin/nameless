@@ -3,7 +3,7 @@
             [ragtime.jdbc :as jdbc]
             [ragtime.repl :as ragtime]
             [ragtime.strategy :as strategy]
-            [nameless.config :as config]))
+            [nameless.chat.db.config :as config]))
 
 (defn- migration-config []
   {:datastore  (jdbc/sql-database {:connection-uri (config/db-jdbc-uri)})

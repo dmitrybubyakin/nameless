@@ -22,7 +22,7 @@ jobs:
       postgres:
         image: postgres:11.6-alpine
         env:
-          POSTGRES_USER: runner
+          POSTGRES_USER: namelss
           POSTGRES_PASSWORD: ''
           POSTGRES_DB: namelss_test
         ports:

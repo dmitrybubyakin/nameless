@@ -21,3 +21,9 @@ docker pull ikshitijsingh/namelss:latest
 docker run --add-host=database:192.168.43.8 ikshitijsingh/namelss:latest
 docker run --network="host" ikshitijsingh/namelss:latest
 ```
+
+### Run tests locallly
+Postgres should be running at port
+```shell script
+lein with-profile test test
+```

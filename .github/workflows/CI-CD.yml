@@ -23,7 +23,7 @@ jobs:
       run: lein with-profile test test
 
     - name: Run coverage analysis
-      run : lein cloverage --codecov
+      run : lein with-profile test cloverage --codecov
 
     - name: Uplaod codecov report
       uses: codecov/codecov-action@v1

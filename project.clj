@@ -20,7 +20,6 @@
                  [clj-time "0.15.2"]
                  [ring/ring-json "0.5.0"]
                  [ring/ring-defaults "0.3.2"]
-                 [ring-logger "1.0.1"]
                  [prismatic/schema "1.1.12"]
                  [ring-cors "0.1.13"]
                  [ring/ring-mock "0.4.0"]

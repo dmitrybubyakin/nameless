@@ -15,7 +15,6 @@
     [config.core :refer [env]]
     [ring.middleware.defaults :refer :all]
     [ring.middleware.cors :refer [wrap-cors]]
-    [ring.logger :as rlogger]
     [nameless.utils :as utils])
   (:gen-class))
 
@@ -40,7 +39,6 @@
 
 (def handler
   (-> app-routes
-      (rlogger/wrap-with-logger)
       (wrap-json-params)
       (wrap-defaults (assoc-in site-defaults [:security :anti-forgery] false))
       (wrap-cors :access-control-allow-origin [#"https://namelss.com",#"https://localhost:3000"]

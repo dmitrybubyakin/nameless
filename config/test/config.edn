@@ -3,7 +3,7 @@
  :db      {:name     "namelss_test"
            :type     "postgresql"
            :port     "5432"
-           :user     "postgres"
+           :user     "runner"
            :server   "localhost"
            :password ""}
  :hikari  {:connection-timeout 2000
@@ -14,7 +14,7 @@
            :maximum-pool-size  50
            :pool-name          "db-pool"
            :adapter            "postgresql"
-           :username           "postgres"
+           :username           "runner"
            :password           ""
            :database-name      "namelss_test"
            :server-name        "localhost"

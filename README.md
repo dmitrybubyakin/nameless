@@ -34,3 +34,8 @@ lein with-profile test test
 ```shell script
 lein with-profile prod uberjar
 ```
+
+## Run reverse proxy with HTTPS
+```shell script
+./ngrok http 8080
+```

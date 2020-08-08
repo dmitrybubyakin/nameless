@@ -20,7 +20,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Run tests
-      run: lein test
+      run: lein with-profile test test
 
     - name: Run coverage analysis
       run : lein cloverage --codecov

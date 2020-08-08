@@ -19,13 +19,14 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Run tests
     - uses: harmon758/postgresql-action@v1
       with:
         postgresql version: '11'
         postgresql db: 'namelss_test'
         postgresql user: 'postgres'
-     - run: lein with-profile test test
+
+    - name: Run tests
+      run: lein with-profile test test
 
     - name: Run coverage analysis
       run : lein with-profile test cloverage --codecov

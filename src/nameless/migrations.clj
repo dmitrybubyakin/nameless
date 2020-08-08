@@ -1,5 +1,5 @@
 (ns nameless.migrations
-  (:require [clojure.tools.logging :as log]
+  (:require [taoensso.timbre :as log]
             [ragtime.jdbc :as jdbc]
             [ragtime.repl :as ragtime]
             [ragtime.strategy :as strategy]

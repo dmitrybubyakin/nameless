@@ -1,6 +1,6 @@
 (ns nameless.chat.sessions
   (:require [immutant.web.async :as async]
-            [clojure.tools.logging :as log]
+            [taoensso.timbre :as log]
             [nameless.cache :as cache]
             [nameless.chat.domain.core :as core]))
 

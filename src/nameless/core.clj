@@ -10,12 +10,13 @@
     [nameless.handler :as handler]
     [ring.middleware.json :refer [wrap-json-response wrap-json-body wrap-json-params]]
     [nameless.migrations :as mg]
-    [clojure.tools.logging :as log]
+    [taoensso.timbre :as log]
     [nameless.datasource :as ds]
     [config.core :refer [env]]
     [ring.middleware.defaults :refer :all]
     [ring.middleware.cors :refer [wrap-cors]]
-    [ring.logger :as rlogger])
+    [ring.logger :as rlogger]
+    [nameless.utils :as utils])
   (:gen-class))
 
 (defroutes app-routes
@@ -27,8 +28,12 @@
              (GET "/chats/:url" [url] (handler/get-chats url)))
            (route/resources "/"))
 
-(defn run-job [command]
+(defn init-ds []
   (mount.core/start)
+  (utils/init-timbre-logger))
+
+(defn run-job [command]
+  (init-ds)
   (case command
     "migrate" (mg/migrate)
     "rollback" (mg/rollback)))
@@ -43,7 +48,7 @@
       (web-middleware/wrap-websocket sessions/websocket-callbacks)))
 
 (defn start-api-server []
-  (mount.core/start)
+  (init-ds)
   (web/run
     handler
     {"port" (:port (:server env))})

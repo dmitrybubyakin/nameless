@@ -11,7 +11,8 @@
                  [yogthos/config "1.1.7"]
                  [mount "0.1.16"]
                  [ragtime "0.8.0"]
-                 [hikari-cp "2.9.0"]
+                 [hikari-cp "2.9.0"
+                  :exclusions [org.slf4j/slf4j-api]]
                  [org.clojure/java.jdbc "0.7.11"]
                  [org.postgresql/postgresql "42.2.8"]
                  [honeysql "0.9.10"]
@@ -22,7 +23,8 @@
                  [ring-logger "1.0.1"]
                  [prismatic/schema "1.1.12"]
                  [ring-cors "0.1.13"]
-                 [ring/ring-mock "0.4.0"]]
+                 [ring/ring-mock "0.4.0"]
+                 [com.taoensso/timbre "4.10.0"]]
   :plugins [[lein-cloverage "1.0.9"]]
   :main ^:skip-aot nameless.core
   :uberjar-name "nameless-standalone.jar"

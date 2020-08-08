@@ -7,7 +7,7 @@
             [clj-time.core :as t]
             [clj-time.coerce :as c]
             [config.core :refer [env]]
-            [clojure.tools.logging :as log])
+            [taoensso.timbre :as log])
   (:import (java.net URLDecoder)))
 
 (defn session->unique-id [channel]

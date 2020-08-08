@@ -1,7 +1,7 @@
 (ns nameless.datasource
   (:require [hikari-cp.core :as hikari]
             [nameless.migrations :as mg]
-            [clojure.tools.logging :as log]
+            [taoensso.timbre :as log]
             [mount.core :refer [defstate]]
             [config.core :refer [env]]))
 

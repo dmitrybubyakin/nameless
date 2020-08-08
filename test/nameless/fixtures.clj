@@ -2,7 +2,7 @@
   (:require [clojure.test :refer :all]
             [nameless.datasource :as db]
             [clojure.java.jdbc :as jdbc]
-            [clojure.tools.logging :as log]
+            [taoensso.timbre :as log]
             [mount.core :as mount])
   (:import (org.postgresql.util PSQLException)))
 

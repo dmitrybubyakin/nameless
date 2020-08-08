@@ -1,7 +1,7 @@
 (ns nameless.config
   (:require [mount.core :refer [defstate]]
             [config.core :refer [env]]
-            [clojure.tools.logging :as log]))
+            [taoensso.timbre :as log]))
 
 (defn db-jdbc-uri []
   (let [{:keys [type server port name user password]} (:db env)

@@ -1,5 +1,5 @@
 (ns nameless.chat.db.core
-  (:require [clojure.tools.logging :as log]
+  (:require [taoensso.timbre :as log]
             [honeysql.core :as s]
             [honeysql.helpers :as h]
             [clojure.java.jdbc :as jdbc]

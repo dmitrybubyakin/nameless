@@ -1,6 +1,6 @@
 (ns nameless.handler
   (:require [cheshire.core :as json]
-            [clojure.tools.logging :as log]
+            [taoensso.timbre :as log]
             [nameless.chat.domain.core :as dc]
             [nameless.validation :as v]))
 

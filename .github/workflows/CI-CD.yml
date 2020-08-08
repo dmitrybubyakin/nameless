@@ -17,13 +17,14 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      - postgres:12.2-alpine
-
-    variables:
-      POSTGRES_DB: namelss_test
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: ""
-      POSTGRES_HOST_AUTH_METHOD: trust
+      postgres:
+        image: postgres
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: ''
+          POSTGRES_DB: namelss_test
 
     steps:
     - uses: actions/checkout@v2

@@ -29,3 +29,8 @@ docker run --network="host" ikshitijsingh/namelss:latest
 ```shell script
 lein with-profile test test
 ```
+
+## How to build service 
+```shell script
+lein with-profile prod uberjar
+```

@@ -21,11 +21,13 @@
                  [ring/ring-defaults "0.3.2"]
                  [ring-logger "1.0.1"]
                  [prismatic/schema "1.1.12"]
-                 [ring-cors "0.1.13"]]
+                 [ring-cors "0.1.13"]
+                 [ring/ring-mock "0.4.0"]]
   :plugins [[lein-cloverage "1.0.9"]]
   :main ^:skip-aot nameless.core
   :uberjar-name "nameless-standalone.jar"
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}
              :prod    {:resource-paths ["config/prod"]}
+             :test    {:resource-paths ["config/test"]}
              :dev     {:resource-paths ["config/dev"]}})

@@ -33,18 +33,19 @@
     "migrate" (mg/migrate)
     "rollback" (mg/rollback)))
 
+(def handler
+  (-> app-routes
+      (rlogger/wrap-with-logger)
+      (wrap-json-params)
+      (wrap-defaults (assoc-in site-defaults [:security :anti-forgery] false))
+      (wrap-cors :access-control-allow-origin [#"https://namelss.com",#"https://localhost:3000"]
+                 :access-control-allow-methods [:get :put :post :delete])
+      (web-middleware/wrap-websocket sessions/websocket-callbacks)))
+
 (defn start-api-server []
   (mount.core/start)
   (web/run
-    (-> app-routes
-        (rlogger/wrap-with-logger)
-        (wrap-json-params)
-        (wrap-defaults (assoc-in site-defaults [:security :anti-forgery] false))
-        (wrap-cors :access-control-allow-origin [#"https://namelss.com",#"https://localhost:3000"]
-                   :access-control-allow-methods [:get :put :post :delete])
-        ;; wrap the handler with websocket support
-        ;; websocket requests will go to the callbacks, ring requests to the handler
-        (web-middleware/wrap-websocket sessions/websocket-callbacks))
+    handler
     {"port" (:port (:server env))})
   (log/info (str "Running webserver at port " (:port (:server env)))))
 

@@ -19,19 +19,18 @@ jobs:
           - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
+    steps:
+      - uses: actions/checkout@v2
 
-  steps:
-    - uses: actions/checkout@v2
+      - name: Run tests
+        run: lein with-profile test test
 
-    - name: Run tests
-      run: lein with-profile test test
+      - name: DockerHub build
+        run: docker build . --file Dockerfile --tag namelss:${{steps.vars.outputs.tag}}
 
-    - name: DockerHub build
-      run: docker build . --file Dockerfile --tag namelss:${{steps.vars.outputs.tag}}
-
-    - name: DockerHub Publish
-      uses: elgohr/Publish-Docker-Github-Action@master
-      with:
-        name: ikshitijsingh/namelss
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: DockerHub Publish
+        uses: elgohr/Publish-Docker-Github-Action@master
+        with:
+          name: ikshitijsingh/namelss
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}

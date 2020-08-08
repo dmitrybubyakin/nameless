@@ -26,7 +26,7 @@ jobs:
         run: lein with-profile test test
 
       - name: DockerHub build
-        run: docker build . --file Dockerfile --tag namelss:${{steps.vars.outputs.tag}}
+        run: docker build . --file Dockerfile --tag namelss:${GITHUB_REF/refs\/tags\//}
 
       - name: DockerHub Publish
         uses: elgohr/Publish-Docker-Github-Action@master

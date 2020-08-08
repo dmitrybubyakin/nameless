@@ -1,7 +1,9 @@
 ## nameless
 ![CI](https://github.com/singhkshitij/nameless/workflows/CI/badge.svg)
 [![codecov](https://codecov.io/gh/singhkshitij/nameless/branch/master/graph/badge.svg?token=EFTBG8Y5UD)](https://codecov.io/gh/singhkshitij/nameless)
-
+![Docker image size](https://img.shields.io/docker/image-size/ikshitijsingh/namelss)
+![Downloads](https://img.shields.io/docker/pulls/ikshitijsingh/namelss?style=flat-square)
+![Version](https://img.shields.io/docker/v/ikshitijsingh/namelss)
 ## Setup Instructions
 - Install clojure on your machine
 - Install lein on you machine

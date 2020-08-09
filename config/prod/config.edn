@@ -4,7 +4,7 @@
            :type     "postgresql"
            :port     "5432"
            :user     "namelss"
-           :server   "127.0.0.1"
+           :server   "host.docker.internal"
            :password "nameLess@786p"}
  :hikari  {:connection-timeout 2000
            :validation-timeout 1000
@@ -17,7 +17,7 @@
            :username           "namelss"
            :password           "nameLess@786p"
            :database-name      "namelss"
-           :server-name        "127.0.0.1"
+           :server-name        "host.docker.internal"
            :port-number        5432
            :register-mbeans    false}
  :server  {:port 8080}

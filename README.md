@@ -25,6 +25,12 @@ lein run server
 docker pull ikshitijsingh/namelss:latest
 docker run --network="host" ikshitijsingh/namelss:latest
 ```
+*NOTE* : 
+To run docker container on mac and windows locally please use this command
+```shell script
+docker run ikshitijsingh/namelss:latest "{:server \"host.docker.internal\" :name \"namelss\" :user \"namelss\" :password \"\"}" "{:server-name \"host.docker.internal\" :database-name \"namelss\" :username \"namelss\" :password \"\"}"
+```
+It overrides default host to point to local psql instance
 
 ### Run docker and override env configs 
 ```shell script

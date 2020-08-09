@@ -26,6 +26,14 @@ docker pull ikshitijsingh/namelss:latest
 docker run --network="host" ikshitijsingh/namelss:latest
 ```
 
+### Run docker and override env configs 
+```shell script
+docker run -d --network="host" <DOCKER_IMAGE> <DB_CONFIGS_STRINGIFIED_EDN> <HIKARI_CONFIGS_STRINGIFIED_EDN>
+docker run -d --network="host" ikshitijsingh/namelss:latest "{:server \"localhost\"}" "{:server-name \"localhost\"}" 
+```
+Modify `run.sh` to add more env variables with parent config key as var name
+Ex: `HIKARI` for `{:hikari {:server "localhost"}}`  
+
 ## How to run tests locally ?
 
 ```shell script

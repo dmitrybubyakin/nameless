@@ -22,4 +22,4 @@
 
 (defn parse [schema-for-input input]
   (->> (wk/keywordize-keys input)
-    ((c/coercer schema-for-input input-coercion-map))))
+       ((c/coercer schema-for-input input-coercion-map))))

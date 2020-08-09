@@ -6,13 +6,13 @@
             [config.core :refer [env]]))
 
 (defstate datasource
-          :start (let [db-config (:hikari env)]
-                   (do
-                     (mg/migrate)
-                     (log/info "Starting DB connection pool")
-                     (hikari/make-datasource db-config)))
-          :stop (do (hikari/close-datasource datasource)
-                    (log/info "Closed DB connection pool")))
+  :start (let [db-config (:hikari env)]
+           (do
+             (mg/migrate)
+             (log/info "Starting DB connection pool")
+             (hikari/make-datasource db-config)))
+  :stop (do (hikari/close-datasource datasource)
+            (log/info "Closed DB connection pool")))
 
 (defn conn []
   {:datasource datasource})

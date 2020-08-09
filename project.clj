@@ -24,7 +24,8 @@
                  [ring-cors "0.1.13"]
                  [ring/ring-mock "0.4.0"]
                  [com.taoensso/timbre "4.10.0"]]
-  :plugins [[lein-cloverage "1.0.9"]]
+  :plugins [[lein-cloverage "1.0.9"]
+            [lein-cljfmt "0.6.8"]]
   :main ^:skip-aot nameless.core
   :uberjar-name "nameless-standalone.jar"
   :target-path "target/%s"

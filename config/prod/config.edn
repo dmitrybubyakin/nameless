@@ -1,11 +1,11 @@
 {:cache   {:port 6379
            :host "localhost"}
- :db      {:name     ""
+ :db      {:name     "namelss"
            :type     "postgresql"
            :port     "5432"
-           :user     "namelss"
-           :server   "host.docker.internal"
-           :password "nameLess@786p"}
+           :user     ""
+           :server   ""
+           :password ""}
  :hikari  {:connection-timeout 2000
            :validation-timeout 1000
            :idle-timeout       60000
@@ -15,9 +15,9 @@
            :pool-name          "db-pool"
            :adapter            "postgresql"
            :username           "namelss"
-           :password           "nameLess@786p"
+           :password           ""
            :database-name      ""
-           :server-name        "host.docker.internal"
+           :server-name        ""
            :port-number        5432
            :register-mbeans    false}
  :server  {:port 8080}

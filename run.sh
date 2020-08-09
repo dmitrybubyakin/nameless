@@ -2,4 +2,4 @@
 
 echo Your container args are: "$1" $2
 ls
-java -jar nameless.jar server
+java -Ddb='$1' -Dhikari='$2' -jar nameless.jar server

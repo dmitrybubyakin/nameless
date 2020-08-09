@@ -52,6 +52,12 @@ lein with-profile prod uberjar
 ```
 
 ## Run reverse proxy with HTTPS
+This is to expose localhost to internet
+```shell script
+lein run server
+```
+And in another tab
 ```shell script
 ./ngrok http 8080
 ```
+Use the urls returned by ngrok service

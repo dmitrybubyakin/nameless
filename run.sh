@@ -1,3 +1,3 @@
 #!/bin/sh
 
-java -Ddb= -Dhikari=  -jar nameless.jar server
+echo Your container args are: "$@"

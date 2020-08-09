@@ -1,10 +1,10 @@
 {:cache   {:port 6379
            :host "localhost"}
- :db      {:name     "namelss"
+ :db      {:name     ""
            :type     "postgresql"
            :port     "5432"
            :user     ""
-           :server   ""
+           :server   "localhost"
            :password ""}
  :hikari  {:connection-timeout 2000
            :validation-timeout 1000
@@ -14,10 +14,10 @@
            :maximum-pool-size  50
            :pool-name          "db-pool"
            :adapter            "postgresql"
-           :username           "namelss"
+           :username           ""
            :password           ""
            :database-name      ""
-           :server-name        ""
+           :server-name        "localhost"
            :port-number        5432
            :register-mbeans    false}
  :server  {:port 8080}

@@ -67,8 +67,9 @@
 
 (defn create-room [url host]
   (let [set-active true
+        room-active? (db/room-exists? url)
         response (db/create-room! url host set-active)]
-    (if (= :failure response)
+    (if (or room-active? (= :failure response))
       {:status :failure}
       {:status :success
        :data   response})))

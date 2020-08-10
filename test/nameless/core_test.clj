@@ -33,7 +33,47 @@
             actual-response (handler (-> (request :post "/api/v1/room/loremIpsum")
                                          (json-body data)))
             response-data (-> (json/decode (:body actual-response))
-                               (wk/keywordize-keys))]
+                              (wk/keywordize-keys))]
+        (is (= 200 (:status actual-response)))
+        (is (= "success" (:status response-data)))
+        (is (= expected-response (:data response-data)))))
+    (testing "should return 500 is room already exists"
+      (let [data {:host "John Doe"}
+            expected-response "Failed to create room !"
+            actual-response (handler (-> (request :post "/api/v1/room/loremIpsum")
+                                         (json-body data)))
+            response-data (-> (json/decode (:body actual-response))
+                              (wk/keywordize-keys))]
+        (is (= 400 (:status actual-response)))
+        (is (= "failure" (:status response-data)))
+        (is (= expected-response (:data response-data)))))
+    (testing "should return 500 if valid data is not passed"
+      (let [data {:toast "John Doe"}
+            expected-response "Error while parsing request {:host (not (instance? java.lang.String nil))}"
+            actual-response (handler (-> (request :post "/api/v1/room/loremIpsum")
+                                         (json-body data)))
+            response-data (-> (json/decode (:body actual-response))
+                              (wk/keywordize-keys))]
+        (is (= 500 (:status actual-response)))
+        (is (= expected-response response-data)))))
+
+  (testing "When check if room active GET request is made"
+    (testing "should return 200 and false when room is not active"
+      (let [expected-response {:active false}
+            actual-response (handler (request :get "/api/v1/room/loremIpsumRoom"))
+            response-data (-> (json/decode (:body actual-response))
+                              (wk/keywordize-keys))]
+        (is (= 200 (:status actual-response)))
+        (is (= "success" (:status response-data)))
+        (is (= expected-response (:data response-data)))))
+    (testing "should return 200 and true when room is active"
+      (let [data {:host "John Doe"}
+            _ (handler (-> (request :post "/api/v1/room/loremIpsumRoom")
+                                              (json-body data)))
+            expected-response {:active true}
+            actual-response (handler (request :get "/api/v1/room/loremIpsumRoom"))
+            response-data (-> (json/decode (:body actual-response))
+                              (wk/keywordize-keys))]
         (is (= 200 (:status actual-response)))
         (is (= "success" (:status response-data)))
         (is (= expected-response (:data response-data)))))))

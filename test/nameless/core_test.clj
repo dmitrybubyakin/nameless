@@ -6,7 +6,10 @@
             [ring.mock.request :refer [request json-body]]
             [config.core :refer [env]]
             [cheshire.core :as json]
-            [clojure.walk :as wk]))
+            [clojure.walk :as wk]
+            [nameless.validation :as v]
+            [nameless.chat.domain.core :as dc]
+            [nameless.chat.db.core :as db]))
 
 (use-fixtures :once fix/mount-sut)
 (use-fixtures :each fix/clear)
@@ -79,7 +82,24 @@
                               (wk/keywordize-keys))]
         (is (= 200 (:status actual-response)))
         (is (= success (:status response-data)))
-        (is (= expected-response (:data response-data))))))
+        (is (= expected-response (:data response-data)))))
+    (testing "should return 500 when parse error"
+      (with-redefs [v/parse (fn [_ _] {:error "Failed to parse error"})]
+        (let [expected-response "Error while parsing request Failed to parse error"
+              actual-response (handler (request :get "/api/v1/active/room/1242"))
+              response-data (-> (json/decode (:body actual-response))
+                                (wk/keywordize-keys))]
+          (is (= 500 (:status actual-response)))
+          (is (= expected-response response-data)))))
+    (testing "should return 400 when failed to check active room"
+      (with-redefs [db/room-active? (fn [_] :failure)]
+        (let [expected-response "Failed to get active rooms !"
+              actual-response (handler (request :get "/api/v1/active/room/1242"))
+              response-data (-> (json/decode (:body actual-response))
+                                (wk/keywordize-keys))]
+          (is (= 400 (:status actual-response)))
+          (is (= failure (:status response-data)))
+          (is (= expected-response (:data response-data)))))))
 
   (testing "When GET chat api request is made"
     (testing "should return 200 response and empty array for new chat"
@@ -93,6 +113,7 @@
         (is (= 200 (:status actual-response)))
         (is (= success (:status response-data)))
         (is (= expected-response (:data response-data)))))
+    ;(testing "TODO should return 200 response with array of messages")
     (testing "should return 400 when room does not exists"
       (let [expected-response "Failed to get chats !"
             actual-response (handler (request :get "/api/v1/chats/loremIpsumNoRoom"))
@@ -101,4 +122,11 @@
         (is (= 400 (:status actual-response)))
         (is (= failure (:status response-data)))
         (is (= expected-response (:data response-data)))))
-    (testing "should return 200 response with array of messages")))
+    (testing "should return 500 when parse error"
+      (with-redefs [v/parse (fn [_ _] {:error "Failed to parse error"})]
+        (let [expected-response "Error while parsing request Failed to parse error"
+              actual-response (handler (request :get "/api/v1/chats/loremIpsumNoRoom"))
+              response-data (-> (json/decode (:body actual-response))
+                                (wk/keywordize-keys))]
+          (is (= 500 (:status actual-response)))
+          (is (= expected-response response-data)))))))

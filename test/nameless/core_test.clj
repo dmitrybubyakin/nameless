@@ -37,7 +37,7 @@
         (is (= 200 (:status actual-response)))
         (is (= "success" (:status response-data)))
         (is (= expected-response (:data response-data)))))
-    (testing "should return 500 is room already exists"
+    (testing "should return 400 if room already exists"
       (let [data {:host "John Doe"}
             expected-response "Failed to create room !"
             actual-response (handler (-> (request :post "/api/v1/room/loremIpsum")

@@ -22,8 +22,8 @@
   (GET "/" [] "Welcome to the world of anonymity !")
   (GET "/ping" [] "pong")
   (context "/api/v1" []
-    (GET "/room/:url" [url] (handler/active-room? url))
     (POST "/room/:url" [url host] (handler/create-room url host))
+    (GET "/room/:url" [url] (handler/active-room? url))
     (GET "/chats/:url" [url] (handler/get-chats url)))
   (route/resources "/"))
 

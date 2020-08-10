@@ -18,7 +18,7 @@
 (defn active-room? [url]
   (let [request (v/parse v/ActiveMeeting? {:url url})]
     (if (:error request)
-      (produce-parse-err! :check-active-meeting (:error request))
+      (produce-parse-err! :check-active-room (:error request))
       (let [{:keys [url]} request
             response (dc/active-room? url)]
         (if (= (:status response) :success)

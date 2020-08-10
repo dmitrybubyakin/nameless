@@ -63,7 +63,7 @@
   (testing "When check if room active GET request is made"
     (testing "should return 200 and false when room is not active"
       (let [expected-response {:active false}
-            actual-response (handler (request :get "/api/v1/room/loremIpsumRoom"))
+            actual-response (handler (request :get "/api/v1/active/room/loremIpsumRoom"))
             response-data (-> (json/decode (:body actual-response))
                               (wk/keywordize-keys))]
         (is (= 200 (:status actual-response)))
@@ -74,7 +74,7 @@
             _ (handler (-> (request :post "/api/v1/room/loremIpsumRoom")
                            (json-body data)))
             expected-response {:active true}
-            actual-response (handler (request :get "/api/v1/room/loremIpsumRoom"))
+            actual-response (handler (request :get "/api/v1/active/room/loremIpsumRoom"))
             response-data (-> (json/decode (:body actual-response))
                               (wk/keywordize-keys))]
         (is (= 200 (:status actual-response)))

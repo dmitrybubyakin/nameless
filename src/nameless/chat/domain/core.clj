@@ -75,8 +75,9 @@
        :data   response})))
 
 (defn get-chats [url]
-  (let [response (db/get-chats url)]
-    (if (= :failure response)
+  (let [room-active? (db/room-exists? url)
+        response (db/get-chats url)]
+    (if (or (false? room-active?) (= :failure response))
       {:status :failure}
       (->> (transform-date response)
            (assoc {:status :success} :data)))))

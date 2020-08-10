@@ -11,6 +11,9 @@
 (use-fixtures :once fix/mount-sut)
 (use-fixtures :each fix/clear)
 
+(def failure "failure")
+(def success "success")
+
 (deftest test-dummy-routes
   (testing "When homepage is opened"
     (testing "should return valid string when landed on homepage"
@@ -24,7 +27,7 @@
         (is (= (:status response) 200))
         (is (= (:body response) "pong"))))))
 
-(deftest test-api
+(deftest test-apis
 
   (testing "When create room POST request is made"
     (testing "should create room and return 200 response code with valid response"
@@ -35,7 +38,7 @@
             response-data (-> (json/decode (:body actual-response))
                               (wk/keywordize-keys))]
         (is (= 200 (:status actual-response)))
-        (is (= "success" (:status response-data)))
+        (is (= success (:status response-data)))
         (is (= expected-response (:data response-data)))))
     (testing "should return 400 if room already exists"
       (let [data {:host "John Doe"}
@@ -45,7 +48,7 @@
             response-data (-> (json/decode (:body actual-response))
                               (wk/keywordize-keys))]
         (is (= 400 (:status actual-response)))
-        (is (= "failure" (:status response-data)))
+        (is (= failure (:status response-data)))
         (is (= expected-response (:data response-data)))))
     (testing "should return 500 if valid data is not passed"
       (let [data {:toast "John Doe"}
@@ -64,16 +67,38 @@
             response-data (-> (json/decode (:body actual-response))
                               (wk/keywordize-keys))]
         (is (= 200 (:status actual-response)))
-        (is (= "success" (:status response-data)))
+        (is (= success (:status response-data)))
         (is (= expected-response (:data response-data)))))
     (testing "should return 200 and true when room is active"
       (let [data {:host "John Doe"}
             _ (handler (-> (request :post "/api/v1/room/loremIpsumRoom")
-                                              (json-body data)))
+                           (json-body data)))
             expected-response {:active true}
             actual-response (handler (request :get "/api/v1/room/loremIpsumRoom"))
             response-data (-> (json/decode (:body actual-response))
                               (wk/keywordize-keys))]
         (is (= 200 (:status actual-response)))
-        (is (= "success" (:status response-data)))
-        (is (= expected-response (:data response-data)))))))
+        (is (= success (:status response-data)))
+        (is (= expected-response (:data response-data))))))
+
+  (testing "When GET chat api request is made"
+    (testing "should return 200 response and empty array for new chat"
+      (let [data {:host "John Doe"}
+            _ (handler (-> (request :post "/api/v1/room/loremIpsumNewRoom")
+                           (json-body data)))
+            expected-response []
+            actual-response (handler (request :get "/api/v1/chats/loremIpsumNewRoom"))
+            response-data (-> (json/decode (:body actual-response))
+                              (wk/keywordize-keys))]
+        (is (= 200 (:status actual-response)))
+        (is (= success (:status response-data)))
+        (is (= expected-response (:data response-data)))))
+    (testing "should return 400 when room does not exists"
+      (let [expected-response "Failed to get chats !"
+            actual-response (handler (request :get "/api/v1/chats/loremIpsumNoRoom"))
+            response-data (-> (json/decode (:body actual-response))
+                              (wk/keywordize-keys))]
+        (is (= 400 (:status actual-response)))
+        (is (= failure (:status response-data)))
+        (is (= expected-response (:data response-data)))))
+    (testing "should return 200 response with array of messages")))

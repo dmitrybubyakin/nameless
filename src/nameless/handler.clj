@@ -43,4 +43,4 @@
             response (dc/get-chats url)]
         (if (= (:status response) :success)
           (respond! 200 response)
-          (respond! 400 {:status :failure, :data "Failed to create room !"}))))))
+          (respond! 400 {:status :failure, :data "Failed to get chats !"}))))))

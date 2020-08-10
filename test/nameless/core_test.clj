@@ -4,7 +4,9 @@
             [nameless.fixtures :as fix]
             [nameless.core :refer [handler]]
             [ring.mock.request :refer [request json-body]]
-            [config.core :refer [env]]))
+            [config.core :refer [env]]
+            [cheshire.core :as json]
+            [clojure.walk :as wk]))
 
 (use-fixtures :once fix/mount-sut)
 (use-fixtures :each fix/clear)
@@ -23,11 +25,15 @@
         (is (= (:body response) "pong"))))))
 
 (deftest test-api
+
   (testing "When create room POST request is made"
     (testing "should create room and return 200 response code with valid response"
       (let [data {:host "John Doe"}
-            expected-response "{\"status\":\"success\",\"data\":{\"url\":\"loremIpsum\",\"host\":\"John Doe\",\"active\":true}}"
+            expected-response {:url "loremIpsum" :host "John Doe" :active true}
             actual-response (handler (-> (request :post "/api/v1/room/loremIpsum")
-                                         (json-body data)))]
+                                         (json-body data)))
+            response-data (-> (json/decode (:body actual-response))
+                               (wk/keywordize-keys))]
         (is (= 200 (:status actual-response)))
-        (is (= expected-response (:body actual-response)))))))
+        (is (= "success" (:status response-data)))
+        (is (= expected-response (:data response-data)))))))

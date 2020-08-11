@@ -40,11 +40,11 @@
     (testing "Should save message to db"
       (let [expected-response {:url "mypersonalroom" :owner "John Pop" :data "Lorem Ipsum is the new trend"}
             data {:host (:owner expected-response)}
-            _ (handler (-> (request :post "/api/v1/room/mypersonalroom")
-                           (json-body data)))
             message (json/encode expected-response)
             sock (ws/connect (str hostname "mypersonalroom?JohnPop"))
             _ (ws/send-msg sock message)
+            _ (handler (-> (request :post "/api/v1/room/mypersonalroom")
+                           (json-body data)))
             actual-response (handler (request :get "/api/v1/chats/mypersonalroom"))
             response-data (->> (json/decode (:body actual-response))
                               (wk/keywordize-keys)

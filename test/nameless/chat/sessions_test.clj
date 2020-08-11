@@ -50,7 +50,7 @@
                               (wk/keywordize-keys)
                               (:data)
                               (map :data))]
-        (is (= (:data expected-response) (first response-data)))))))
+        (is (some #(= (:data expected-response) %) response-data))))))
 
 
 

@@ -113,7 +113,6 @@
         (is (= 200 (:status actual-response)))
         (is (= success (:status response-data)))
         (is (= expected-response (:data response-data)))))
-    ;(testing "TODO should return 200 response with array of messages")
     (testing "should return 400 when room does not exists"
       (let [expected-response "Failed to get chats !"
             actual-response (handler (request :get "/api/v1/chats/loremIpsumNoRoom"))

@@ -4,7 +4,9 @@
             [nameless.fixtures :as fix]
             [gniazdo.core :as ws]
             [cheshire.core :as json]
-            [clojure.walk :as wk]))
+            [clojure.walk :as wk]
+            [ring.mock.request :refer [request json-body]]
+            [nameless.core :refer [handler]]))
 
 (use-fixtures :once fix/mount-sut-for-ws)
 (use-fixtures :each fix/clear)
@@ -26,15 +28,29 @@
             _ (ws/close sock)])))
 
   (testing "When message is sent over open ws connection"
-    (testing "Should save message to db and return valid response"
+    (testing "Should return valid response"
       (let [expected-response {:url "mychatroom" :owner "John Doe" :data "Typed Lorem Ipsum"}
             message (json/encode expected-response)
             sock (ws/connect (str hostname "mycustomroom?JohnDoe")
                              :on-receive #(is (= expected-response (-> (json/decode %)
-                                                                        (wk/keywordize-keys)
-                                                                        (:message)
-                                                                        (dissoc :dt)))))
-            _ (ws/send-msg sock message)]))))
+                                                                       (wk/keywordize-keys)
+                                                                       (:message)
+                                                                       (dissoc :dt)))))
+            _ (ws/send-msg sock message)]))
+    (testing "Should save message to db"
+      (let [expected-response {:url "mypersonalroom" :owner "John Pop" :data "Lorem Ipsum is the new trend"}
+            data {:host (:owner expected-response)}
+            _ (handler (-> (request :post "/api/v1/room/mypersonalroom")
+                           (json-body data)))
+            message (json/encode expected-response)
+            sock (ws/connect (str hostname "mypersonalroom?JohnPop"))
+            _ (ws/send-msg sock message)
+            actual-response (handler (request :get "/api/v1/chats/mypersonalroom"))
+            response-data (->> (json/decode (:body actual-response))
+                              (wk/keywordize-keys)
+                              (:data)
+                              (map :data))]
+        (is (= (:data expected-response) (first response-data)))))))
 
 
 

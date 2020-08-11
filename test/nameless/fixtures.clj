@@ -3,13 +3,24 @@
             [nameless.datasource :as db]
             [clojure.java.jdbc :as jdbc]
             [taoensso.timbre :as log]
-            [mount.core :as mount])
+            [mount.core :as mount]
+            [gniazdo.core :as ws]
+            [nameless.core :as c])
   (:import (org.postgresql.util PSQLException)))
 
 (defn mount-sut [f]
   (mount/start (mount/only [#'db/datasource]))
   (f)
   (mount/stop))
+
+(defn socket []
+  (c/start-api-server))
+
+(defn mount-sut-for-ws [f]
+  (socket)
+  (f)
+  ;TODO stop service
+  )
 
 (defn truncate [table]
   (try

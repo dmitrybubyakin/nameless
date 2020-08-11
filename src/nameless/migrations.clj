@@ -9,10 +9,7 @@
   {:datastore  (jdbc/sql-database {:connection-uri (config/db-jdbc-uri)})
    :migrations (jdbc/load-resources "migrations")
    :strategy    strategy/apply-new
-   :reporter   (fn [_ op id]
-                 (case op
-                   :up (log/info "Applying migration" id)
-                   :down (log/info "Rolling back migration" id)))})
+   :reporter   (fn [_ _ _])})
 
 (defn migrate []
   (log/info "Running migration now !!")

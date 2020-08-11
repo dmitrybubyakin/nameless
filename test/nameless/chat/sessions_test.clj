@@ -2,7 +2,9 @@
   (:require [nameless.chat.sessions :refer :all]
             [clojure.test :refer :all]
             [nameless.fixtures :as fix]
-            [gniazdo.core :as ws]))
+            [gniazdo.core :as ws]
+            [cheshire.core :as json]
+            [clojure.walk :as wk]))
 
 (use-fixtures :once fix/mount-sut-for-ws)
 (use-fixtures :each fix/clear)
@@ -21,7 +23,18 @@
       (let [expected-entry-msg "JohnDoe left the room mycustomroom"
             sock (ws/connect (str hostname "mycustomroom?JohnDoe")
                              :on-close #(is (= expected-entry-msg %)))
-            _ (ws/close sock)]))))
+            _ (ws/close sock)])))
+
+  (testing "When message is sent over open ws connection"
+    (testing "Should save message to db and return valid response"
+      (let [expected-response {:url "mychatroom" :owner "John Doe" :data "Typed Lorem Ipsum"}
+            message (json/encode expected-response)
+            sock (ws/connect (str hostname "mycustomroom?JohnDoe")
+                             :on-receive #(is (= expected-response (-> (json/decode %)
+                                                                        (wk/keywordize-keys)
+                                                                        (:message)
+                                                                        (dissoc :dt)))))
+            _ (ws/send-msg sock message)]))))
 
 
 

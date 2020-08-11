@@ -14,7 +14,14 @@
     (testing "Should return entry message with username"
       (let [expected-entry-msg "{\"type\":\"entry\",\"message\":{\"data\":\"Lorem Ipsum joined the room\"}}"
             _ (ws/connect (str hostname "porting?Lorem%20Ipsum")
-                          :on-receive #(is (= expected-entry-msg %)))]))))
+                          :on-receive #(is (= expected-entry-msg %)))])))
+
+  (testing "When connection is closed"
+    (testing "Should return exit message with username"
+      (let [expected-entry-msg "JohnDoe left the room mycustomroom"
+            sock (ws/connect (str hostname "mycustomroom?JohnDoe")
+                             :on-close #(is (= expected-entry-msg %)))
+            _ (ws/close sock)]))))
 
 
 

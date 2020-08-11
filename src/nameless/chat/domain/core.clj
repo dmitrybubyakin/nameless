@@ -56,7 +56,8 @@
         uid (session->unique-id channel)
         message (str owner " left the room")]
     (cache/remove-session uid channel)
-    (log/info message uid)))
+    (log/info message uid)
+    message))
 
 (defn active-room? [url]
   (let [response (db/room-active? url)]

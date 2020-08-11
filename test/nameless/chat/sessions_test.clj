@@ -45,7 +45,7 @@
             message (json/encode expected-response)
             sock (ws/connect (str hostname "mypersonalroom?JohnPop"))
             _ (ws/send-msg sock message)
-            _ (Thread/sleep 10000)
+            _ (Thread/sleep 1000)
             actual-response (handler (request :get "/api/v1/chats/mypersonalroom"))
             response-data (->> (json/decode (:body actual-response))
                               (wk/keywordize-keys)

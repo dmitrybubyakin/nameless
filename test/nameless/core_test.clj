@@ -10,7 +10,8 @@
             [ragtime.repl :as ragtime]
             [nameless.validation :as v]
             [nameless.chat.domain.core :as dc]
-            [nameless.chat.db.core :as db]))
+            [nameless.chat.db.core :as db]
+            [clojure.string :as string]))
 
 (use-fixtures :once fix/mount-sut)
 (use-fixtures :each fix/clear)
@@ -47,8 +48,8 @@
   (testing "When help command is given"
     (testing "It should show help"
       (let [help-shown? (atom false)]
-        (with-redefs [get-help (fn []
-                                 (reset! help-shown? true))]
+        (with-redefs [string/join (fn [_ _]
+                                    (reset! help-shown? true))]
           (-main "help")
           (is (true? @help-shown?))))))
 

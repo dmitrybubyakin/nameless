@@ -2,11 +2,12 @@
   (:require [nameless.handler :refer :all]
             [clojure.test :refer :all]
             [nameless.fixtures :as fix]
-            [nameless.core :refer [handler]]
+            [nameless.core :refer :all]
             [ring.mock.request :refer [request json-body]]
             [config.core :refer [env]]
             [cheshire.core :as json]
             [clojure.walk :as wk]
+            [ragtime.repl :as ragtime]
             [nameless.validation :as v]
             [nameless.chat.domain.core :as dc]
             [nameless.chat.db.core :as db]))
@@ -16,6 +17,48 @@
 
 (def failure "failure")
 (def success "success")
+
+(deftest test-app-startup-commands
+
+  (testing "When server startup command is given"
+    (testing "It should start service"
+      (let [server-started? (atom false)]
+        (with-redefs [start-api-server (fn []
+                                         (reset! server-started? true))]
+          (-main "server")
+          (is (true? @server-started?))))))
+
+  (testing "When migrate command is given"
+    (testing "It should run migrations"
+      (let [migration-ran? (atom false)]
+        (with-redefs [ragtime/migrate (fn [_]
+                                        (reset! migration-ran? true))]
+          (-main "migrate")
+          (is (true? @migration-ran?))))))
+
+  (testing "When rollback command is given"
+    (testing "It should rollback last migration"
+      (let [rollback-ran? (atom false)]
+        (with-redefs [ragtime/rollback (fn [_]
+                                         (reset! rollback-ran? true))]
+          (-main "rollback")
+          (is (true? @rollback-ran?))))))
+
+  (testing "When help command is given"
+    (testing "It should show help"
+      (let [help-shown? (atom false)]
+        (with-redefs [get-help (fn []
+                                 (reset! help-shown? true))]
+          (-main "help")
+          (is (true? @help-shown?))))))
+
+  (testing "When no command is given"
+    (testing "It should show help and report error"
+      (let [help-shown? (atom false)]
+        (with-redefs [get-help (fn []
+                                 (reset! help-shown? true))]
+          (-main "")
+          (is (true? @help-shown?)))))))
 
 (deftest test-dummy-routes
   (testing "When homepage is opened"

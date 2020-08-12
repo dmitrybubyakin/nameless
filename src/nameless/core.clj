@@ -15,7 +15,8 @@
     [config.core :refer [env]]
     [ring.middleware.defaults :refer :all]
     [ring.middleware.cors :refer [wrap-cors]]
-    [taoensso.timbre :as timbre])
+    [taoensso.timbre :as timbre]
+    [clojure.string :as string])
   (:gen-class))
 
 (defroutes app-routes
@@ -52,14 +53,25 @@
    {"port" (:port (:server env))})
   (log/info (str "Running webserver at port " (:port (:server env)))))
 
+(defn get-help []
+  (->> [""
+        "Usage:"
+        "lein run <command>"
+        ""
+        "Valid Commands:"
+        "server    Starts the api server"
+        "migrate   Runs the new migrations"
+        "rollback  Rolls back the last run migration"
+        "help      Prints the help"]
+       (string/join \newline)))
+
 (defn -main [& [args]]
   (case args
     "server" (start-api-server)
     "migrate" (run-job "migrate")
     "rollback" (run-job "rollback")
-    "help" (do (prn "A Clojure service")
-               (System/exit 0))
+    "help" (do (println (get-help)))
 
     (do
       (prn "Must supply a valid command to run")
-      (System/exit 1))))
+      (println (get-help)))))

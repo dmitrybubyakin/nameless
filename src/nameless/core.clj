@@ -20,13 +20,13 @@
   (:gen-class))
 
 (defroutes app-routes
-  (GET "/" [] "Welcome to the world of anonymity !")
-  (GET "/ping" [] "pong")
-  (context "/api/v1" []
-    (POST "/room/:url" [url host] (handler/create-room url host))
-    (GET "/active/room/:url" [url] (handler/active-room? url))
-    (GET "/chats/:url" [url] (handler/get-chats url)))
-  (route/resources "/"))
+           (GET "/" [] "Welcome to the world of anonymity !")
+           (GET "/ping" [] "pong")
+           (context "/api/v1" []
+             (POST "/room/:url" [url host] (handler/create-room url host))
+             (GET "/active/room/:url" [url] (handler/active-room? url))
+             (GET "/chats/:url" [url] (handler/get-chats url)))
+           (route/resources "/"))
 
 (defn init-ds []
   (mount.core/start)
@@ -39,18 +39,21 @@
     "rollback" (mg/rollback)))
 
 (def handler
-  (-> app-routes
-      (wrap-json-params)
-      (wrap-defaults (assoc-in site-defaults [:security :anti-forgery] false))
-      (wrap-cors :access-control-allow-origin [#"https://namelss.com",#"https://localhost:3000"]
-                 :access-control-allow-methods [:get :put :post :delete])
-      (web-middleware/wrap-websocket sessions/websocket-callbacks)))
+  (let [cors-allowed-domains (if (= (:env env) "prod")
+                               #"https://namelss.com"
+                               #".*")]
+    (-> app-routes
+        (wrap-json-params)
+        (wrap-defaults (assoc-in site-defaults [:security :anti-forgery] false))
+        (wrap-cors :access-control-allow-origin [cors-allowed-domains]
+                   :access-control-allow-methods [:get :post])
+        (web-middleware/wrap-websocket sessions/websocket-callbacks))))
 
 (defn start-api-server []
   (init-ds)
   (web/run
-   handler
-   {"port" (:port (:server env))})
+    handler
+    {"port" (:port (:server env))})
   (log/info (str "Running webserver at port " (:port (:server env)))))
 
 (defn get-help []

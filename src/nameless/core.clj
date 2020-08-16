@@ -45,8 +45,8 @@
     (-> app-routes
         (wrap-json-params)
         (wrap-defaults (assoc-in site-defaults [:security :anti-forgery] false))
-        (wrap-cors :access-control-allow-origin [cors-allowed-domains]
-                   :access-control-allow-methods [:get :post])
+        (wrap-cors :access-control-allow-origin cors-allowed-domains
+                   :access-control-allow-methods [:get :post :options])
         (web-middleware/wrap-websocket sessions/websocket-callbacks))))
 
 (defn start-api-server []

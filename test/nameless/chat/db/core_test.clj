@@ -132,3 +132,41 @@
         (let [url "lorem-ipsum-dolor-amet"
               response (room-exists? url)]
           (is (= :failure response)))))))
+
+(deftest toggle-visibility-test
+  (testing "When request is made to toggle room visibilty"
+    (testing "should return status if it exists and status is toggled"
+      (let [url "lorem-ipsum-dolor-amets"
+            owner "John Doe"
+            _ (create-room! url owner true)
+            response (toggle-visibility "lorem-ipsum-dolor-amets")]
+        (is (false? (:status response)))))
+    (testing "should return :failure if room doesn't exists"
+      (let [url "lorem-random-ipsum"
+            response (toggle-visibility url)]
+        (is (= :failure response))))
+    (testing "should report failure if exception is thrown"
+      (with-redefs [jdbc/query (fn [_ _]
+                                 (throw (Exception. "Db connection could not be establised")))]
+        (let [url "lorem-ipsum-dolor-amets"
+              response (toggle-visibility url)]
+          (is (= :failure response)))))))
+
+(deftest mark-room-visibility!-test
+  (testing "When request is made to mark room visibilty"
+    (testing "should return status if it exists and status is toggled"
+      (let [url "lorem-ipsum-dolor-mone"
+            owner "John Doe"
+            _ (create-room! url owner true)
+            response (mark-room-visibility! "lorem-ipsum-dolor-mone" false)]
+        (is (false? (:status response)))))
+    (testing "should return :failure if room doesn't exists"
+      (let [url "lorem-ipsum-dolor-404"
+            response (mark-room-visibility! url false)]
+        (is (= :failure response))))
+    (testing "should report failure if exception is thrown"
+      (with-redefs [jdbc/execute! (fn [_ _ _]
+                                 (throw (Exception. "Db connection could not be establised")))]
+        (let [url "lorem-ipsum-dolor-mone"
+              response (toggle-visibility url)]
+          (is (= :failure response)))))))

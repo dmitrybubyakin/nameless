@@ -81,3 +81,10 @@
       {:status :failure}
       (->> (transform-date response)
            (assoc {:status :success} :data)))))
+
+(defn toggle-room-visibility [url]
+  (let [response (db/toggle-visibility url)]
+    (if (= :failure response)
+      {:status :failure}
+      {:status :success
+       :data   response})))

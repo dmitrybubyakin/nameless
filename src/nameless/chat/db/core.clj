@@ -54,16 +54,18 @@
 
 (defn room-active? [url]
   (try
-    (let [active-response (->> (-> {:select [:active]
+    (let [response (->> (-> {:select [:active :open]
                              :from   [:room]
                              :where  [:= :url url]}
                             (s/format))
                         (jdbc/query (ds/conn))
                         (first))]
-      (if (empty? active-response)
-        {:active false
-         :message "No such room exists !"}
-        {:active true}))
+      (cond
+        (empty? response) {:active  false
+                           :message "No such room exists !"}
+        (and (true? (:active response)) (false? (:open response))) {:active  false
+                                                                    :message "Room has been locked by host !"}
+        :else {:active true}))
     (catch Exception e
       (log/error "Failed to check active room : " (.getMessage e))
       :failure)))
@@ -110,4 +112,35 @@
         true))
     (catch Exception e
       (log/error "Failed to check active room : " (.getMessage e))
+      :failure)))
+
+(defn mark-room-visibility! [url status]
+  (try
+    (let [response (->> (-> (h/update :room)
+                            (sset {:open status})
+                            (where [:= :url url])
+                            (s/format))
+                        (jdbc/execute! (ds/conn))
+                        (first))]
+      (if (not= response 0)
+        {:status status}
+        :failure))
+    (catch Exception e
+      (log/error "Failed to mark room visibility : " (.getMessage e))
+      :failure)))
+
+(defn toggle-visibility [url]
+  (try
+    (let [response (->> (-> {:select [:open]
+                             :from   [:room]
+                             :where  [:= :url url]}
+                            (s/format))
+                        (jdbc/query (ds/conn))
+                        (first))]
+      (cond
+        (false? (:open response)) (mark-room-visibility! url true)
+        (true? (:open response)) (mark-room-visibility! url false)
+        :else :failure))
+    (catch Exception e
+      (log/error "Failed to toggle room visibility : " (.getMessage e))
       :failure)))

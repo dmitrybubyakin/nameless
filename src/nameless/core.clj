@@ -25,7 +25,8 @@
            (context "/api/v1" []
              (POST "/room/:url" [url host] (handler/create-room url host))
              (GET "/active/room/:url" [url] (handler/active-room? url))
-             (GET "/chats/:url" [url] (handler/get-chats url)))
+             (GET "/chats/:url" [url] (handler/get-chats url))
+             (PUT "/room/:url/visibility/toggle" [url] (handler/toggle-room-visibility url)))
            (route/resources "/"))
 
 (defn init-ds []

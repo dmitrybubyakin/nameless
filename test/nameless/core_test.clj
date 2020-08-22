@@ -109,7 +109,7 @@
 
   (testing "When check if room active GET request is made"
     (testing "should return 200 and false when room is not active"
-      (let [expected-response {:active false}
+      (let [expected-response {:active false :message "No such room exists !"}
             actual-response (handler (request :get "/api/v1/active/room/loremIpsumRoom"))
             response-data (-> (json/decode (:body actual-response))
                               (wk/keywordize-keys))]
@@ -169,6 +169,41 @@
       (with-redefs [v/parse (fn [_ _] {:error "Failed to parse error"})]
         (let [expected-response "Error while parsing request Failed to parse error"
               actual-response (handler (request :get "/api/v1/chats/loremIpsumNoRoom"))
+              response-data (-> (json/decode (:body actual-response))
+                                (wk/keywordize-keys))]
+          (is (= 500 (:status actual-response)))
+          (is (= expected-response response-data))))))
+
+  (testing "When toggle visibility api request is made"
+    (testing "should return 200 response and open status false of room if room exists"
+      (let [data {:host "John Doe"}
+            _ (handler (-> (request :post "/api/v1/room/loremIpsumNewRoom1")
+                           (json-body data)))
+            actual-response (handler (request :put "/api/v1/room/loremIpsumNewRoom1/visibility/toggle"))
+            response-data (-> (json/decode (:body actual-response))
+                              (wk/keywordize-keys))]
+        (is (= 200 (:status actual-response)))
+        (is (= success (:status response-data)))
+        (is (false? (:status (:data response-data))))))
+    (testing "should return 200 response and open status true if room exists and toggled twice"
+      (let [actual-response (handler (request :put "/api/v1/room/loremIpsumNewRoom1/visibility/toggle"))
+            response-data (-> (json/decode (:body actual-response))
+                              (wk/keywordize-keys))]
+        (is (= 200 (:status actual-response)))
+        (is (= success (:status response-data)))
+        (is (true? (:status (:data response-data))))))
+    (testing "should return failure response when room doesn't exists"
+      (let [actual-response (handler (request :put "/api/v1/room/loremPsum/visibility/toggle"))
+            expected-response "Failed to toggle room visibility !"
+            response-data (-> (json/decode (:body actual-response))
+                              (wk/keywordize-keys))]
+        (is (= 400 (:status actual-response)))
+        (is (= failure (:status response-data)))
+        (is (= expected-response (:data response-data)))))
+    (testing "should return 500 when parse error"
+      (with-redefs [v/parse (fn [_ _] {:error "Failed to parse error"})]
+        (let [expected-response "Error while parsing request Failed to parse error"
+              actual-response (handler (request :put "/api/v1/room/loremPsum/visibility/toggle"))
               response-data (-> (json/decode (:body actual-response))
                                 (wk/keywordize-keys))]
           (is (= 500 (:status actual-response)))

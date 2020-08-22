@@ -32,4 +32,6 @@
 (defn clear [f]
   (truncate "chat")
   (truncate "room")
-  (f))
+  (f)
+  (truncate "chat")
+  (truncate "room"))

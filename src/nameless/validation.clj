@@ -13,6 +13,9 @@
 (s/defschema GetChatsReq
   {:url s/Str})
 
+(s/defschema ToggleVisibilityReq
+  {:url s/Str})
+
 (defn parse [schema-for-input input]
   (->> (wk/keywordize-keys input)
        ((c/coercer schema-for-input {}))))

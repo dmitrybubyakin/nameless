@@ -44,3 +44,13 @@
         (if (= (:status response) :success)
           (respond! 200 response)
           (respond! 400 {:status :failure, :data "Failed to get chats !"}))))))
+
+(defn toggle-room-visibility [url]
+  (let [request (v/parse v/ToggleVisibilityReq {:url url})]
+    (if (:error request)
+      (produce-parse-err! :toggle-visibility (:error request))
+      (let [{:keys [url]} request
+            response (dc/toggle-room-visibility url)]
+        (if (= (:status response) :success)
+          (respond! 200 response)
+          (respond! 400 {:status :failure, :data "Failed to toggle room visibility !"}))))))

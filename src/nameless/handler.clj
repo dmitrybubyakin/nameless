@@ -21,7 +21,7 @@
       (produce-parse-err! :check-active-room (:error request))
       (let [{:keys [url]} request
             response (dc/active-room? url)]
-        (if (= (:status response) :success)
+        (if (v/Success? response)
           (respond! 200 response)
           (respond! 400 {:status :failure, :data "Failed to get active rooms !"}))))))
 
@@ -31,18 +31,21 @@
       (produce-parse-err! :create-new-room (:error request))
       (let [{:keys [url host]} request
             response (dc/create-room url host)]
-        (if (= (:status response) :success)
+        (if (v/Success? response)
           (respond! 200 response)
           (respond! 400 {:status :failure, :data "Failed to create room !"}))))))
 
-(defn get-chats [url]
+(defn get-chat-data [url]
   (let [request (v/parse v/GetChatsReq {:url url})]
     (if (:error request)
       (produce-parse-err! :get-chats (:error request))
       (let [{:keys [url]} request
-            response (dc/get-chats url)]
-        (if (= (:status response) :success)
-          (respond! 200 response)
+            chats (dc/get-chats url)
+            open? (dc/room-open? url)
+            data {:chats  (:data chats)
+                  :isOpen (:data open?)}]
+        (if (and (v/Success? chats) (v/Success? open?))
+          (respond! 200 (assoc chats :data data))
           (respond! 400 {:status :failure, :data "Failed to get chats !"}))))))
 
 (defn toggle-room-visibility [url]
@@ -51,6 +54,6 @@
       (produce-parse-err! :toggle-visibility (:error request))
       (let [{:keys [url]} request
             response (dc/toggle-room-visibility url)]
-        (if (= (:status response) :success)
+        (if (v/Success? response)
           (respond! 200 response)
           (respond! 400 {:status :failure, :data "Failed to toggle room visibility !"}))))))

@@ -88,3 +88,10 @@
       {:status :failure}
       {:status :success
        :data   response})))
+
+(defn room-open? [url]
+  (let [response (db/room-open? url)]
+    (if (= :failure response)
+      {:status :failure}
+      {:status :success
+       :data   response})))

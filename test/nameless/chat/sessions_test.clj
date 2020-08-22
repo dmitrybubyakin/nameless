@@ -51,7 +51,7 @@
                               (wk/keywordize-keys)
                               (:data)
                               (map :data))]
-        (is (some #(= (:data expected-response) %) response-data))))))
+        (is (some #(= (:chats (:data expected-response)) %) response-data))))))
 
 
 

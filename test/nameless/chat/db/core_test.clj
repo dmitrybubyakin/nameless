@@ -170,3 +170,21 @@
         (let [url "lorem-ipsum-dolor-mone"
               response (toggle-visibility url)]
           (is (= :failure response)))))))
+
+(deftest room-open?-test
+  (testing "When request is made to check if room is open"
+    (testing "should return failure if it doesn't exist"
+      (let [response (room-open? "lorem-ipsum-dolors")]
+        (is (= :failure response))))
+    (testing "should return true if room is open"
+      (let [url "lorem-ipsum-dolors"
+            owner "John Doe"
+            _ (create-room! url owner true)
+            response (room-open? url)]
+        (is (true? response))))
+    (testing "should report failure if exception is thrown"
+      (with-redefs [jdbc/query (fn [_ _]
+                                 (throw (Exception. "Db connection could not be establised")))]
+        (let [url "lorem-ipsum-dolors"
+              response (room-open? url)]
+          (is (= :failure response)))))))

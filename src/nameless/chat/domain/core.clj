@@ -47,8 +47,7 @@
     (cache/save-session uid channel)
     (log/info message uid)
     (when (false? message-exists?)
-      (save-message uid message owner :entry)
-      (prepare-message channel :entry {:data message}))))
+      (prepare-message channel :entry (save-message uid message owner :entry)))))
 
 (defn remove-ws-session [channel]
   (let [owner (-> (:query-string (async/originating-request channel))

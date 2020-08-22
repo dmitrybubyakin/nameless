@@ -16,9 +16,9 @@
 (deftest websocket-crud-test
   (testing "When connection is opened"
     (testing "Should return entry message with username"
-      (let [expected-entry-msg "{\"type\":\"entry\",\"message\":{\"data\":\"Lorem Ipsum joined the room\"}}"
+      (let [expected-entry-msg "Lorem Ipsum joined the room"
             _ (ws/connect (str hostname "porting?Lorem%20Ipsum")
-                          :on-receive #(is (= expected-entry-msg %)))])))
+                          :on-receive #(is (= expected-entry-msg  (get-in (json/decode %) ["message" "data"]))))])))
 
   (testing "When connection is closed"
     (testing "Should return exit message with username"

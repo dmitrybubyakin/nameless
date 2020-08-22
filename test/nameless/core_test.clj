@@ -127,6 +127,15 @@
         (is (= 200 (:status actual-response)))
         (is (= success (:status response-data)))
         (is (= expected-response (:data response-data)))))
+    (testing "should return 200 and false when room is active but not open"
+      (let [_ (handler (request :put "/api/v1/room/loremIpsumRoom/visibility/toggle"))
+            expected-response {:active false :message "Room has been locked by host !"}
+            actual-response (handler (request :get "/api/v1/active/room/loremIpsumRoom"))
+            response-data (-> (json/decode (:body actual-response))
+                              (wk/keywordize-keys))]
+        (is (= 200 (:status actual-response)))
+        (is (= success (:status response-data)))
+        (is (= expected-response (:data response-data)))))
     (testing "should return 500 when parse error"
       (with-redefs [v/parse (fn [_ _] {:error "Failed to parse error"})]
         (let [expected-response "Error while parsing request Failed to parse error"

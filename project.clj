@@ -24,7 +24,8 @@
                  [ring-cors "0.1.13"]
                  [ring/ring-mock "0.4.0"]
                  [com.taoensso/timbre "4.10.0"]
-                 [stylefruits/gniazdo "1.1.4"]]
+                 [stylefruits/gniazdo "1.1.4"]
+                 [pjstadig/humane-test-output "0.9.0"]]
   :plugins [[lein-cloverage "1.0.9"]
             [lein-cljfmt "0.6.8"]]
   :main ^:skip-aot nameless.core
@@ -32,5 +33,7 @@
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}
              :prod    {:resource-paths ["config/prod"]}
-             :test    {:resource-paths ["config/test"]}
+             :test    {:resource-paths ["config/test"]
+                       :injections [(require 'pjstadig.humane-test-output)
+                                    (pjstadig.humane-test-output/activate!)]}
              :dev     {:resource-paths ["config/dev"]}})

@@ -54,15 +54,16 @@
 
 (defn room-active? [url]
   (try
-    (let [response (->> (-> {:select [:active]
+    (let [active-response (->> (-> {:select [:active]
                              :from   [:room]
                              :where  [:= :url url]}
                             (s/format))
                         (jdbc/query (ds/conn))
                         (first))]
-      (if (empty? response)
-        {:active false}
-        response))
+      (if (empty? active-response)
+        {:active false
+         :message "No such room exists !"}
+        {:active true}))
     (catch Exception e
       (log/error "Failed to check active room : " (.getMessage e))
       :failure)))

@@ -47,7 +47,7 @@ jobs:
         run: docker build . --file Dockerfile --tag namelss:$(date +%s)
 
       - name: DockerHub Publish
-        uses: elgohr/Publish-Docker-Github-Action@master
+        uses: elgohr/Publish-Docker-Github-Action@v5
         with:
           name: ikshitijsingh/namelss
           username: ${{ secrets.DOCKER_USERNAME }}
